@@ -1,0 +1,26 @@
+help
+help
+show
+show
+info
+info
+insert 234
+3132
+23
+23
+100000
+100
+distance_education
+first
+timur
+20-08-2029
+90
+red
+2
+2
+2
+saint
+print_ascending
+print_descending
+print_field_descending_semester_enum
+execute_script /home/cun/IdeaProjects/Lab5/src/main/resources/test2.txt
