@@ -8,6 +8,7 @@ import io_utilities.printers.RainbowPrinter;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents a study group with various attributes, including its name, coordinates,
@@ -147,4 +148,14 @@ public class StudyGroup implements Comparable<StudyGroup> {
         return fields;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof StudyGroup that)) return false;
+        return expelledStudents == that.expelledStudents && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(coordinates, that.coordinates) && Objects.equals(creationDate, that.creationDate) && Objects.equals(studentsCount, that.studentsCount) && formOfEducation == that.formOfEducation && semesterEnum == that.semesterEnum && Objects.equals(groupAdmin, that.groupAdmin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, coordinates, creationDate, studentsCount, expelledStudents, formOfEducation, semesterEnum, groupAdmin);
+    }
 }

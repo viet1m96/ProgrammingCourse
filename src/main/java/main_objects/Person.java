@@ -5,6 +5,7 @@ import enums.Color;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * The {@code Person} class represents a person with a name, birthday, weight, eye color, and location.
@@ -18,18 +19,6 @@ public class Person {
 
     /**
      * Constructs a new {@code Person} object from a list of administrative information.
-     * The list should contain the following elements in order:
-     * <ol>
-     *     <li>Name (String)</li>
-     *     <li>Birthday (String in "dd-MM-yyyy" format)</li>
-     *     <li>Weight (Integer)</li>
-     *     <li>Eye Color (String, corresponding to a value in the {@link Color} enum)</li>
-     *     <li>Location X coordinate (Long)</li>
-     *     <li>Location Y coordinate (Integer)</li>
-     *     <li>Location Z coordinate (Integer)</li>
-     *     <li>Location Name (String)</li>
-     * </ol>
-     *
      * @param adminInfo A list containing the person's administrative information.
      * @throws IllegalArgumentException if the list is null, has an incorrect number of elements,
      *                                  or if any of the elements cannot be parsed correctly.
@@ -90,6 +79,7 @@ public class Person {
         return eyeColor.toString();
     }
 
+
     /**
      * Returns the location of the person.
      *
@@ -111,5 +101,16 @@ public class Person {
                 "\t         EyeColor: " + this.eyeColor.toString() + "\n" +
                 "\t         Weight: " + this.weight + "\n" +
                 "\t         Location: " + this.location.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Person person)) return false;
+        return Objects.equals(name, person.name) && Objects.equals(birthDay, person.birthDay) && Objects.equals(weight, person.weight) && eyeColor == person.eyeColor && Objects.equals(location, person.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, birthDay, weight, eyeColor, location);
     }
 }

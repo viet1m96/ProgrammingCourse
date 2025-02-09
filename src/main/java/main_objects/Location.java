@@ -1,5 +1,7 @@
 package main_objects;
 
+import java.util.Objects;
+
 /**
  * The {@code Location} class represents a three-dimensional location with a name.
  * It encapsulates the x, y, and z coordinates, as well as a name for the location.
@@ -69,5 +71,16 @@ public class Location {
     @Override
     public String toString() {
         return "(" + x + ", " + y + ", " + z + ")" + " at " + name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Location location)) return false;
+        return x == location.x && y == location.y && z == location.z && Objects.equals(name, location.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z, name);
     }
 }
