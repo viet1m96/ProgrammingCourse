@@ -20,14 +20,26 @@ import read_mode.ModeManager;
 
 import java.io.IOException;
 
+/**
+ * {@code Handler} manages the interaction with the user, processing commands and handling input.
+ */
 public class Handler {
     private InputReader reader;
+
+    /**
+     * Constructs a {@code Handler} and displays initial welcome messages to the user.
+     */
     public Handler() {
         RainbowPrinter.printInfo("Hello! Welcome to my Application!");
         RainbowPrinter.printInfo("Please type 'help' to read the instructions or type 'exit' to exit.");
         RainbowPrinter.printCondition("(All of the following commands must be typed without whitespace at the beginning and between 2 words there is only one whitespace).");
     }
 
+    /**
+     * Prepares the application by initializing necessary components and loading data from a file.
+     *
+     * @param fileName The name of the file to load data from.
+     */
     public void prepare(String fileName) {
         try {
             reader = new InputReader();
@@ -42,6 +54,10 @@ public class Handler {
         }
         RainbowPrinter.printInfo("Data from file was successfully uploaded!");
     }
+
+    /**
+     * Runs the main loop of the application, continuously reading, preprocessing, and processing user commands.
+     */
     public void run() {
         while(true) {
             try {
@@ -58,11 +74,25 @@ public class Handler {
         }
     }
 
+    /**
+     * Preprocesses the user input to ensure it is valid and contains a recognized command.
+     *
+     * @param input The user input string.
+     * @throws WrongInputException If the input is invalid.
+     * @throws WrongCommandException If the command is not recognized.
+     */
     public void preprocess(String input) throws WrongInputException, WrongCommandException {
         if(!InputChecker.checkInput(input)) {throw new WrongInputException();}
         if(!CommandManager.isCommand(InputPartition.part1st(input.toLowerCase()))) throw new WrongCommandException();
     }
 
+    /**
+     * Processes the user input, executing the corresponding command based on whether it requires additional input.
+     *
+     * @param input The user input string.
+     * @throws UserException If an error occurs during command execution related to user data.
+     * @throws LogException If an error occurs during command execution related to logging.
+     */
     public void process(String input) throws UserException, LogException {
         String nameCommand = InputPartition.part1st(input);
         String argument = InputPartition.part2nd(input);
@@ -72,5 +102,4 @@ public class Handler {
             case NEED_INPUT -> ModeManager.call(nameCommand, argument);
         }
     }
-
 }

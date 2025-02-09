@@ -4,11 +4,16 @@ import enums.FormOfEducation;
 import enums.Semester;
 import io_utilities.printers.RainbowPrinter;
 
-import java.time.LocalDate;
+
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a study group with various attributes, including its name, coordinates,
+ * student count, and associated administrator. Implements the {@link Comparable} interface
+ * for comparing study groups based on their student count.
+ */
 public class StudyGroup implements Comparable<StudyGroup> {
     private Integer id;
     private String name;
@@ -20,7 +25,20 @@ public class StudyGroup implements Comparable<StudyGroup> {
     private Semester semesterEnum;
     private Person groupAdmin;
 
+    /**
+     * Default constructor for creating an empty {@code StudyGroup} object.
+     */
     public StudyGroup() {}
+
+    /**
+     * Constructs a {@code StudyGroup} object from lists of string data.
+     *
+     * @param groupInfo A list of strings containing information about the study group.
+     *                  Expected order: id, name, x coordinate, y coordinate, creation date,
+     *                  students count, expelled students, form of education, semester.
+     * @param adminInfo A list of strings containing information about the group administrator.
+     *                  This list is passed to the {@link Person} constructor.
+     */
     public StudyGroup(List<String> groupInfo, List<String> adminInfo) {
         this.id = Integer.parseInt(groupInfo.get(0));
         this.name = groupInfo.get(1);
@@ -32,6 +50,10 @@ public class StudyGroup implements Comparable<StudyGroup> {
         this.semesterEnum = Semester.valueOf(groupInfo.get(8).toUpperCase());
         this.groupAdmin = new Person(adminInfo);
     }
+
+    /**
+     * Prints all the information of the study group to the console using {@link RainbowPrinter}.
+     */
     public void printEverything() {
         RainbowPrinter.printCondition("*Information of the group:");
         RainbowPrinter.printResult("ID: " + this.id);
@@ -44,32 +66,70 @@ public class StudyGroup implements Comparable<StudyGroup> {
         RainbowPrinter.printResult("Semester: " + this.semesterEnum.toString());
         RainbowPrinter.printResult("Group Admin: " + this.groupAdmin.toString());
     }
+
+    /**
+     * Compares this {@code StudyGroup} to another {@code StudyGroup} based on the student count.
+     *
+     * @param o The other {@code StudyGroup} to compare to.
+     * @return A negative integer, zero, or a positive integer as this {@code StudyGroup}'s student count
+     *         is less than, equal to, or greater than the specified {@code StudyGroup}'s student count.
+     */
     @Override
     public int compareTo(StudyGroup o) {
         return Long.compare(this.studentsCount, o.studentsCount);
     }
+
+    /**
+     * Gets the ID of the study group.
+     *
+     * @return The ID of the study group.
+     */
     public Integer getId() {
         return id;
     }
 
+    /**
+     * Sets the ID of the study group.
+     *
+     * @param id The new ID of the study group.
+     */
     public void setId(Integer id) {
         this.id = id;
     }
 
+    /**
+     * Gets the name of the study group.
+     *
+     * @return The name of the study group.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Gets the semester of the study group.
+     *
+     * @return The semester of the study group as a {@link Semester} enum.
+     */
     public Semester getSemesterEnum() {
         return semesterEnum;
     }
 
+    /**
+     * Gets all the fields of the study group and its associated {@link Person} object as a list of {@link StringBuilder} objects.
+     * The list is ordered as follows:
+     *  - StudyGroup fields: id, name, x coordinate, y coordinate, creation date, student count, expelled students, form of education, semester
+     *  - Person fields: name, birthday, weight, eye color
+     *  - Location fields: x, y, z, name
+     *
+     * @return A list of {@link StringBuilder} objects representing all the fields of the study group.
+     */
     public List<StringBuilder> getAllFields() {
         List<StringBuilder> fields = new ArrayList<>();
         fields.add(new StringBuilder(Integer.toString(this.id)));
         fields.add(new StringBuilder(this.name));
-        fields.add(new StringBuilder(this.coordinates.getX()));
-        fields.add(new StringBuilder(this.coordinates.getY()));
+        fields.add(new StringBuilder(String.valueOf(this.coordinates.getX())));
+        fields.add(new StringBuilder(String.valueOf(this.coordinates.getY())));
         fields.add(new StringBuilder(this.creationDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
         fields.add(new StringBuilder(String.valueOf(this.studentsCount)));
         fields.add(new StringBuilder(String.valueOf(this.expelledStudents)));
