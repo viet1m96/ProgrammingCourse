@@ -9,7 +9,9 @@ public enum TypeOfPer {
     /**
      * Represents a person's name or other String-based identifier.
      */
-    STRING,
+    NAME,
+
+    LOCATION,
 
     /**
      * Represents a person's birthday (date of birth).

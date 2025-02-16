@@ -1,20 +1,12 @@
 package io_utilities.working_with_input;
 
-/**
- * The {@code InputChecker} class provides static utility methods for validating input strings.
- * It offers basic checks for null or empty strings, leading spaces, multiple spaces, tabs, and whether
- * a string represents an integer number.
- */
+import exceptions.user_exceptions.WrongInputException;
+import io_utilities.printers.RainbowPrinter;
+
+import java.io.IOException;
+
 public class InputChecker {
 
-    /**
-     * Checks if the input string is valid based on a set of criteria.
-     * The input string must not be null or empty, must not start with a space, must not contain more than two words
-     * separated by spaces, must not contain double spaces, and must not contain tabs.
-     *
-     * @param input The input string to check.
-     * @return {@code true} if the input string is valid; {@code false} otherwise.
-     */
     public static boolean checkInput(String input) {
         if (input == null || input.isEmpty()) {
             return false;
@@ -34,13 +26,6 @@ public class InputChecker {
         return true;
     }
 
-    /**
-     * Checks if the input string is a valid string after trimming whitespace.
-     * The string must not be null, and after trimming leading and trailing whitespace, it must not be empty.
-     *
-     * @param str The input string to check.
-     * @return {@code true} if the input string is a valid string; {@code false} otherwise.
-     */
     public static boolean checkString(String str) {
         if (str == null) {
             return false;
@@ -49,30 +34,42 @@ public class InputChecker {
         return !str.isEmpty();
     }
 
-    /**
-     * Checks if the input string represents a valid integer number.
-     * The string must not be null or empty, must not contain a decimal point, and must contain only digits
-     * (optionally preceded by a minus sign).
-     *
-     * @param str The input string to check.
-     * @return {@code true} if the input string is a valid integer number; {@code false} otherwise.
-     */
     public static boolean checkIntegerNumber(String str) {
-        if (str == null || str.isEmpty()) {
+        try {
+            Integer.parseInt(str);
+        } catch (NumberFormatException e) {
             return false;
-        }
-        if (str.contains(".")) {
-            return false;
-        }
-        for (int i = 0; i < str.length(); i++) {
-            char tmp = str.charAt(i);
-            if (i == 0 && tmp == '-') {
-                continue;
-            }
-            if ((tmp < '0' || tmp > '9') && tmp != '.') {
-                return false;
-            }
         }
         return true;
+    }
+
+    public static boolean maybeEmpty(String str) {
+        return str == null || str.isEmpty();
+    }
+
+    public static boolean yesOrNo(String action, String notice) {
+        try {
+            RainbowPrinter.printInfo(notice);
+            RainbowPrinter.printInfo("Do you want to " + action + "?");
+            InputReader inputReader = new InputReader();
+            inputReader.setReader();
+            String input = inputReader.readLine();
+            while(true) {
+                if(input.equalsIgnoreCase("yes")) {
+                    return true;
+                } else if(input.equalsIgnoreCase("no")) {
+                    return false;
+                } else {
+                    try {
+                        throw new WrongInputException();
+                    } catch (WrongInputException e) {
+                        RainbowPrinter.printError(e.toString());
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
