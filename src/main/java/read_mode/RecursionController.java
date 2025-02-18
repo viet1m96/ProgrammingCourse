@@ -1,78 +1,93 @@
 package read_mode;
 
+
 import exceptions.user_exceptions.WrongInputException;
 import io_utilities.printers.RainbowPrinter;
 import io_utilities.working_with_input.InputChecker;
 import io_utilities.working_with_input.InputReader;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.*;
+
 
 public class RecursionController {
+    private LinkedHashMap<String, String> edge;
+    private LinkedHashMap<String, Integer> cyclePath;
 
-    private static final HashSet<String> fileSaver = new HashSet<>();
-    private static Integer RecursionCount = null;
-    private static String RecursionName = null;
+    public RecursionController() {
+        edge = new LinkedHashMap<>();
+        cyclePath = new LinkedHashMap<>();
+    }
 
-    private RecursionController() {}
-
-    public static boolean controlRecursion(String arg) throws IOException {
-        if(fileSaver.isEmpty()) {
-            System.out.println("Empty");
-        } else {
-            fileSaver.forEach(System.out::println);
-        }
-        if (!fileSaver.contains(arg)) {
-            System.out.println("added");
-            fileSaver.add(arg);
+    public boolean controlRecursion(String nextFile, String currentFile) {
+//        edge.forEach((key, value) -> {
+//            System.out.println("Key: " + key + " Value: " + value);
+//        });
+        if(!edge.containsKey(nextFile)) {
+            if(edge.isEmpty()) {
+                edge.put(currentFile, null);
+            }
+            edge.put(nextFile, currentFile);
             return true;
         } else {
-            if (RecursionCount == null) {
-                detectRecursion(arg);
-            } else {
-                if (RecursionCount == 0) {
-                    RecursionCount = null;
-                    RecursionName = null;
-                    System.out.println("reset");
+            System.out.println(nextFile);
+            String trace = String.join("\n", traceTheCycle(nextFile, currentFile));
+            if(cyclePath.containsKey(trace)) {
+                if(cyclePath.get(trace) == 0) {
+                    cyclePath.remove(trace);
                     return false;
-                } else if (RecursionName.equals(arg)) {
-                    System.out.println(RecursionCount);
-                    RecursionCount--;
                 }
-            }
-        }
-        return RecursionCount != null && RecursionCount != 0;
-    }
-
-    public static void detectRecursion(String arg) throws IOException {
-        RainbowPrinter.printInfo("Recursion detected, do you want to continue?(yes/no)");
-        InputReader reader = new InputReader();
-        reader.setReader();
-        while (RecursionCount == null) {
-            try {
-                String input = reader.readLine();
-                if (!InputChecker.checkString(input) || (!input.equalsIgnoreCase("yes")) && !input.equalsIgnoreCase("no")) {
-                    throw new WrongInputException();
-                }
-                if (input.equals("yes")) {
-                    RainbowPrinter.printInfo("How many times would you like to run recursively?(Enter a positive integer)");
-                    input = reader.readLine();
-                    if (!InputChecker.checkIntegerNumber(input) || Integer.parseInt(input) <= 0) {
-                        throw new WrongInputException();
-                    } else {
-                        RecursionCount = Integer.parseInt(input);
-                        RecursionName = arg;
+                cyclePath.put(trace, cyclePath.get(trace) - 1);
+                removeCycle(nextFile, currentFile);
+                return true;
+            } else {
+                RainbowPrinter.printCondition("The cycle:");
+                RainbowPrinter.printInfo(trace);
+                if(InputChecker.yesOrNo("read recursively", "Recursion was detected")) {
+                    InputReader inputReader = new InputReader();
+                    inputReader.setReader();
+                    String count = "";
+                    while(count.isEmpty()) {
+                        try {
+                            RainbowPrinter.printInfo("How many times you have read recursively?(Enter a positive integer)");
+                            count = inputReader.readLine();
+                            if(!InputChecker.checkIntegerNumber(count) || Integer.parseInt(count) <= 0) throw new WrongInputException();
+                            cyclePath.put(trace, Integer.parseInt(count) - 1);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } catch (WrongInputException e) {
+                            RainbowPrinter.printError(e.toString());
+                            count = "";
+                        }
                     }
+                    removeCycle(nextFile, currentFile);
+                    return true;
                 } else {
-                    RecursionCount = 0;
+                    return false;
                 }
-            } catch (WrongInputException e) {
-                RainbowPrinter.printError(e.toString());
+
             }
         }
     }
 
-    public static void dropFileName(String arg) {
-        fileSaver.remove(arg);
+    private List<String> traceTheCycle(String nextFile, String currentFile) {
+        List<String> trace = new ArrayList<>();
+        String currentInTrace = currentFile;
+        while(currentInTrace!= null && !currentInTrace.equals(nextFile)) {
+            trace.add(currentInTrace);
+            currentInTrace = edge.get(currentInTrace);
+        }
+        trace.add(currentInTrace);
+        Collections.reverse(trace);
+        trace.add(nextFile);
+        return trace;
     }
+
+    private void removeCycle(String nextFile, String currentFile) {
+        List<String> trace = traceTheCycle(nextFile, currentFile);
+        trace.forEach(edge::remove);
+    }
+
+
+
 }

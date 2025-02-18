@@ -78,7 +78,9 @@ public class Handler {
         if(!InputChecker.checkInput(input)) {
             throw new WrongInputException();
         }
-        if(!commandManager.isCommand(InputPartition.part1st(input.toLowerCase()))) throw new WrongCommandException();
+        if(!commandManager.isCommand(InputPartition.part1st(input.toLowerCase()))) {
+            throw new WrongCommandException();
+        }
     }
 
     public void process(String input) throws UserException, LogException {

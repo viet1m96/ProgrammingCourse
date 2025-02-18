@@ -25,42 +25,47 @@ public class FileReaderMode implements ReadMode {
 
     private CommandManager commandManager;
     private CommandClassifier commandClassifier;
+    private RecursionController recursionController;
     public FileReaderMode() {
         commandManager = new CommandManager();
         commandClassifier = new CommandClassifier();
+        recursionController = new RecursionController();
         commandManager.init();
         commandClassifier.init();
     }
 
     @Override
-    public void executeMode(Invoker invoker, String nameCommand, String arg) throws UserException, LogException {
+    public void executeMode(Invoker invoker, String nameCommand, String currentFile) throws UserException, LogException {
         try {
-            if (!RecursionController.controlRecursion(arg)) return;
             invoker.call("execute_script", new Request(null, null));
             InputReader inputReader = new InputReader();
-            inputReader.setReader(arg);
+            inputReader.setReader(currentFile);
             String inp;
             while ((inp = getUserNextCommand(inputReader)) != null) {
-                String name = InputPartition.part1st(inp);
+                String nameNewCommand = InputPartition.part1st(inp);
                 String argument = InputPartition.part2nd(inp);
-                NeedInput needInput = commandClassifier.getCommandClassifier(name);
+                NeedInput needInput = commandClassifier.getCommandClassifier(nameNewCommand);
+                RainbowPrinter.printCondition("---" + " Current file: " + currentFile + " ---");
                 switch (needInput) {
-                    case NO_NEED_INPUT -> invoker.call(name, new Request(argument, null));
+                    case NO_NEED_INPUT -> invoker.call(nameNewCommand, new Request(argument, null));
                     case NEED_INPUT -> {
-                        if (!name.equals("execute_script")) {
+                        if (!nameNewCommand.equals("execute_script")) {
                             StudyGroup studyGroup = build(inputReader);
                             try {
-                                invoker.call(name, new Request(argument, studyGroup));
+                                invoker.call(nameNewCommand, new Request(argument, studyGroup));
                             } catch (KeyTakenException e) {
                                 RainbowPrinter.printError(e.toString());
                             }
                         } else {
-                            executeMode(invoker, name, argument);
+                            if(recursionController.controlRecursion(argument, currentFile)) {
+                                executeMode(invoker, nameNewCommand, argument);
+                            } else {
+                                return;
+                            }
                         }
                     }
                 }
             }
-            RecursionController.dropFileName(arg);
         } catch (IOException e) {
             e.printStackTrace();
             throw new LogException();
@@ -74,7 +79,7 @@ public class FileReaderMode implements ReadMode {
         if (!InputChecker.checkInput(input)) {
             throw new WrongInputInFileException();
         }
-        if (commandManager.isCommand(InputPartition.part1st(input.toLowerCase())))
+        if (!commandManager.isCommand(InputPartition.part1st(input.toLowerCase())))
             throw new WrongCommandException();
         return input;
     }
