@@ -20,9 +20,6 @@ public class RecursionController {
     }
 
     public boolean controlRecursion(String nextFile, String currentFile) {
-//        edge.forEach((key, value) -> {
-//            System.out.println("Key: " + key + " Value: " + value);
-//        });
         if(!edge.containsKey(nextFile)) {
             if(edge.isEmpty()) {
                 edge.put(currentFile, null);
@@ -30,7 +27,6 @@ public class RecursionController {
             edge.put(nextFile, currentFile);
             return true;
         } else {
-            System.out.println(nextFile);
             String trace = String.join("\n", traceTheCycle(nextFile, currentFile));
             if(cyclePath.containsKey(trace)) {
                 if(cyclePath.get(trace) == 0) {
