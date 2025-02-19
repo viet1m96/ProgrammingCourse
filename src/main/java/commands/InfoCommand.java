@@ -20,9 +20,7 @@ public class InfoCommand extends Command {
 
     @Override
     public void execute(Request request) throws UserException, LogException {
-        if (request.getArgument() != null) {
-            throw new WrongInputException();
-        }
+
         receiver.info();
     }
 }

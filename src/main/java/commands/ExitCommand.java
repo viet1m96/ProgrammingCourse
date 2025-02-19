@@ -20,9 +20,6 @@ public class ExitCommand extends Command {
 
     @Override
     public void execute(Request request) throws UserException, LogException {
-        if (request.getArgument() != null) {
-            throw new WrongInputException();
-        }
         receiver.exit();
     }
 }

@@ -64,6 +64,8 @@ public class CollectionManager {
         if (!collection.containsKey(key)) {
             throw new WrongKeyException();
         } else {
+            StudyGroup studyGroup = request.getStudyGroup();
+            studyGroup.setId(Integer.parseInt(key));
             collection.remove(key);
             collection.put(key, request.getStudyGroup());
         }

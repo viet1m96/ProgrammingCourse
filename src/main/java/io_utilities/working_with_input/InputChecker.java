@@ -11,26 +11,13 @@ public class InputChecker {
         if (input == null || input.isEmpty()) {
             return false;
         }
-        if (input.startsWith(" ")) {
-            return false;
-        }
-        if (input.split(" ").length > 2) {
-            return false;
-        }
-        if (input.contains("  ")) {
-            return false;
-        }
-        if (input.contains("\t")) {
-            return false;
-        }
-        return true;
+        return input.split(" ").length <= 2;
     }
 
     public static boolean checkString(String str) {
         if (str == null) {
             return false;
         }
-        str = str.trim();
         return !str.isEmpty();
     }
 

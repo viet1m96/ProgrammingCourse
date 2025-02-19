@@ -1,0 +1,2 @@
+info
+execute_script /home/cun/IdeaProjects/Lab5/src/main/resources/test.txt

@@ -19,9 +19,7 @@ public class Remove_greaterCommand extends Command {
 
     @Override
     public void execute(Request request) throws UserException {
-        if (request.getArgument() != null) {
-            throw new WrongInputException();
-        }
+
         receiver.remove_if_greater(request);
     }
 }

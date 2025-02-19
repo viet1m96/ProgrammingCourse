@@ -19,9 +19,7 @@ public class Print_ascendingCommand extends Command {
 
     @Override
     public void execute(Request request) throws UserException {
-        if (request.getArgument() != null) {
-            throw new WrongInputException();
-        }
+
         receiver.print_ascending();
     }
 }

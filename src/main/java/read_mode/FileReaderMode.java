@@ -5,6 +5,7 @@ import command_utilities.CommandManager;
 import enums.NeedInput;
 import enums.TypeOfGrp;
 import enums.TypeOfPer;
+import exceptions.LogUtil;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.KeyTakenException;
 import exceptions.user_exceptions.UserException;
@@ -106,7 +107,7 @@ public class FileReaderMode implements ReadMode {
             adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.Z));
             adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.NAME));
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
         return StudyGroupBuilder.parseStudyGroup(groupInfo, adminInfo);

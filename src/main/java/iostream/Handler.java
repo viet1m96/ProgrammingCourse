@@ -5,10 +5,11 @@ import command_utilities.CommandManager;
 
 import enums.NeedInput;
 import exceptions.log_exceptions.LogException;
+import exceptions.user_exceptions.InputFormatException;
 import exceptions.user_exceptions.UserException;
 import exceptions.user_exceptions.WrongCommandException;
-import exceptions.user_exceptions.WrongInputException;
 import io_utilities.printers.RainbowPrinter;
+import io_utilities.working_with_input.FormatChecker;
 import io_utilities.working_with_input.InputChecker;
 import io_utilities.working_with_input.InputPartition;
 import io_utilities.working_with_input.InputReader;
@@ -22,6 +23,7 @@ import java.io.IOException;
 public class Handler {
     private InputReader reader;
     private CollectionManager collectionManager;
+    private FormatChecker formatChecker;
     private CommandManager commandManager;
     private CommandClassifier commandClassifier;
     private ModeManager modeManager;
@@ -38,6 +40,8 @@ public class Handler {
         try {
             reader = new InputReader();
             reader.setReader();
+            formatChecker = new FormatChecker();
+            formatChecker.init();
             commandClassifier = new CommandClassifier();
             commandClassifier.init();
 
@@ -74,13 +78,12 @@ public class Handler {
         }
     }
 
-    public void preprocess(String input) throws WrongInputException, WrongCommandException {
+    public void preprocess(String input) throws InputFormatException {
         if(!InputChecker.checkInput(input)) {
-            throw new WrongInputException();
+            throw new InputFormatException();
         }
-        if(!commandManager.isCommand(InputPartition.part1st(input.toLowerCase()))) {
-            throw new WrongCommandException();
-        }
+        formatChecker.checkFormat(InputPartition.part1st(input), InputPartition.part2nd(input));
+
     }
 
     public void process(String input) throws UserException, LogException {

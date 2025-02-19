@@ -5,7 +5,7 @@ public class Main {
         String filePath = System.getenv("file_name");
         Handler handler = new Handler();
         //handler.prepare(filePath);
-        handler.prepare("/home/cun/IdeaProjects/Lab5/src/main/resources/data.csv");
+        handler.prepare("/home/cun/IdeaProjects/Lab5/src/main/java/data_files/data.csv");
         handler.run();
     }
 }
