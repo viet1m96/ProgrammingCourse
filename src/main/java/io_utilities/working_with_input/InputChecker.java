@@ -37,7 +37,7 @@ public class InputChecker {
     public static boolean yesOrNo(String action, String notice) {
         try {
             RainbowPrinter.printInfo(notice);
-            RainbowPrinter.printInfo("Do you want to " + action + "?");
+            RainbowPrinter.printInfo("Do you want to " + action + "?" + "(yes/no)");
             InputReader inputReader = new InputReader();
             inputReader.setReader();
             String input = inputReader.readLine();
