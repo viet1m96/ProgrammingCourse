@@ -1,5 +1,6 @@
 package main_objects;
 
+import exceptions.LogUtil;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.*;
 import io_utilities.printers.RainbowPrinter;
@@ -148,7 +149,7 @@ public class CollectionManager {
                 writer.writeLines(collection.get(key).getAllFields());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
     }
@@ -179,7 +180,7 @@ public class CollectionManager {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
         RainbowPrinter.printInfo("Loaded successfully " + collection.size() + " groups into the file.");

@@ -1,7 +1,15 @@
 package iostream;
 
+import exceptions.LogUtil;
+import io_utilities.printers.RainbowPrinter;
+
 public class Main {
     public static void main(String[] args) {
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
+            RainbowPrinter.printError("Uncaught exception in thread: " + t.getName());
+            RainbowPrinter.printError("Please look at the log file for more details!");
+            LogUtil.logStackTrace(e);
+        });
         String filePath = System.getenv("file_name");
         Handler handler = new Handler();
         //handler.prepare(filePath);

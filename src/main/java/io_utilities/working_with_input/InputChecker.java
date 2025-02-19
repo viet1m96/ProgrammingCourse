@@ -1,5 +1,6 @@
 package io_utilities.working_with_input;
 
+import exceptions.LogUtil;
 import exceptions.user_exceptions.WrongInputException;
 import io_utilities.printers.RainbowPrinter;
 
@@ -55,7 +56,7 @@ public class InputChecker {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
         }
         return false;
     }

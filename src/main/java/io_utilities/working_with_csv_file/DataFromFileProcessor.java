@@ -2,6 +2,7 @@ package io_utilities.working_with_csv_file;
 
 import enums.TypeOfGrp;
 import enums.TypeOfPer;
+import exceptions.LogUtil;
 import exceptions.user_exceptions.WrongUploadingDataException;
 import io_utilities.working_with_input.ObjInputChecker;
 import java.time.LocalDate;
@@ -30,7 +31,7 @@ public class DataFromFileProcessor {
         try {
             LocalDate.parse(tokens.get(4), formatter);
         } catch (DateTimeParseException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new WrongUploadingDataException();
         }
         boolList.add(ObjInputChecker.checkInputForGroupFile(tokens.get(5), TypeOfGrp.COUNT));

@@ -4,6 +4,7 @@ import command_utilities.CommandClassifier;
 import command_utilities.CommandManager;
 
 import enums.NeedInput;
+import exceptions.LogUtil;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.InputFormatException;
 import exceptions.user_exceptions.UserException;
@@ -33,7 +34,6 @@ public class Handler {
     public Handler() {
         RainbowPrinter.printInfo("Hello! Welcome to my Application!");
         RainbowPrinter.printInfo("Please type 'help' to read the instructions or type 'exit' to exit.");
-        RainbowPrinter.printCondition("(All of the following commands must be typed without whitespace at the beginning and between 2 words there is only one whitespace).");
     }
 
     public void prepare(String fileName) {
@@ -55,7 +55,7 @@ public class Handler {
             invoker = new Invoker(commandManager, receiver);
 
             collectionManager.uploadData();
-            RainbowPrinter.printInfo("The process of uploading data finished.!");
+            RainbowPrinter.printInfo("The process of uploading data finished!");
         } catch (LogException e) {
             RainbowPrinter.printError(e.toString());
         }
@@ -73,7 +73,7 @@ public class Handler {
                 RainbowPrinter.printError(e.toString());
                 RainbowPrinter.printCondition(">>" + "The command could not be executed!");
             } catch (IOException e) {
-                e.printStackTrace();
+                LogUtil.logStackTrace(e);
             }
         }
     }

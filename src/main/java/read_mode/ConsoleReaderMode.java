@@ -2,6 +2,7 @@ package read_mode;
 
 import enums.TypeOfGrp;
 import enums.TypeOfPer;
+import exceptions.LogUtil;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.UserException;
 import exceptions.user_exceptions.WrongInputException;
@@ -54,7 +55,7 @@ public class ConsoleReaderMode implements ReadMode {
                 for(int i = 0; i < 4; i++) adminInfo.add("null");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
         return StudyGroupBuilder.parseStudyGroup(groupInfo, adminInfo);

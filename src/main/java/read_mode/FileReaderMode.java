@@ -68,7 +68,7 @@ public class FileReaderMode implements ReadMode {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
 

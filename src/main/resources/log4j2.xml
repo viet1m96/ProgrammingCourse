@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN" monitorInterval="30">
+<Configuration status="WARN">
     <Appenders>
-        <File name="File" fileName="logs/application.log" append="true">
-            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        <File name="MyFileAppender" fileName="/home/cun/IdeaProjects/Lab5/src/main/java/data_files/error.log" append="true" immediateFlush="true">
+            <PatternLayout>
+                <Pattern>%d{dd-MM-yyy HH:mm:ss.SSS} [%t] %-5level - %msg%n%throwable</Pattern>
+            </PatternLayout>
         </File>
     </Appenders>
     <Loggers>
-        <Root level="warn">
-            <AppenderRef ref="File"/>
+        <Root level="error">
+            <AppenderRef ref="MyFileAppender"/>
         </Root>
     </Loggers>
 </Configuration>

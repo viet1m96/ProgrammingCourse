@@ -3,6 +3,7 @@ package io_utilities.working_with_input;
 import enums.Color;
 import enums.FormOfEducation;
 import enums.Semester;
+import exceptions.LogUtil;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.UserException;
 import exceptions.user_exceptions.WrongInputException;
@@ -51,7 +52,7 @@ public class StudyGroupBuilder {
             studyGroup.setSemesterEnum(semester);
             studyGroup.setGroupAdmin(parsePerson(adminInfo));
         } catch (DateTimeParseException | IllegalArgumentException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
         return studyGroup;
@@ -79,7 +80,7 @@ public class StudyGroupBuilder {
             admin.setLocation(parseLocation(adminInfo));
 
         } catch (DateTimeParseException | IllegalArgumentException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
         return admin;
@@ -104,7 +105,7 @@ public class StudyGroupBuilder {
                 }
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            LogUtil.logStackTrace(e);
             throw new LogException();
         }
         return location;

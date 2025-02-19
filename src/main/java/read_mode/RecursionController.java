@@ -1,6 +1,7 @@
 package read_mode;
 
 
+import exceptions.LogUtil;
 import exceptions.user_exceptions.WrongInputException;
 import io_utilities.printers.RainbowPrinter;
 import io_utilities.working_with_input.InputChecker;
@@ -50,7 +51,7 @@ public class RecursionController {
                             if(!InputChecker.checkIntegerNumber(count) || Integer.parseInt(count) <= 0) throw new WrongInputException();
                             cyclePath.put(trace, Integer.parseInt(count) - 1);
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            LogUtil.logStackTrace(e);
                         } catch (WrongInputException e) {
                             RainbowPrinter.printError(e.toString());
                             count = "";
