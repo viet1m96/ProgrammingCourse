@@ -45,7 +45,7 @@ public class RecursionController {
                     String count = "";
                     while(count.isEmpty()) {
                         try {
-                            RainbowPrinter.printInfo("How many times you have read recursively?(Enter a positive integer)");
+                            RainbowPrinter.printInfo("How many times do you want to read recursively?(Enter a positive integer)");
                             count = inputReader.readLine();
                             if(!InputChecker.checkIntegerNumber(count) || Integer.parseInt(count) <= 0) throw new WrongInputException();
                             cyclePath.put(trace, Integer.parseInt(count) - 1);
