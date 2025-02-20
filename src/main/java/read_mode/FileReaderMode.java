@@ -57,16 +57,22 @@ public class FileReaderMode implements ReadMode {
                             } catch (KeyTakenException e) {
                                 RainbowPrinter.printError(e.toString());
                             }
-                        } else {
+                        } else { // chu trinh con chay xong la chu trinh cha khong chay duoc nua
                             if(recursionController.controlRecursion(argument, currentFile)) {
                                 executeMode(invoker, nameNewCommand, argument);
+                            }
+                            if(recursionController.timeOP(currentFile) == 1) {
+                                continue;
                             } else {
+                                recursionController.setTimeOP(currentFile, -1);
                                 return;
                             }
+
                         }
                     }
                 }
             }
+            recursionController.reset(currentFile);
         } catch (IOException e) {
             LogUtil.logStackTrace(e);
             throw new LogException();
@@ -85,7 +91,7 @@ public class FileReaderMode implements ReadMode {
         return input;
     }
 
-    public static StudyGroup build(InputReader reader) throws UserException, LogException {
+    public StudyGroup build(InputReader reader) throws UserException, LogException {
         List<String> groupInfo = new ArrayList<>();
         List<String> adminInfo = new ArrayList<>();
         groupInfo.add("0");
@@ -113,7 +119,7 @@ public class FileReaderMode implements ReadMode {
         return StudyGroupBuilder.parseStudyGroup(groupInfo, adminInfo);
     }
 
-    public static String getInputFromUserForGroup(InputReader reader, TypeOfGrp type) throws IOException, UserException {
+    public String getInputFromUserForGroup(InputReader reader, TypeOfGrp type) throws IOException, UserException {
         String str = reader.readLine();
         boolean check = ObjInputChecker.checkInputForGroupFile(str, type);
         if (check) {
@@ -123,7 +129,7 @@ public class FileReaderMode implements ReadMode {
         }
     }
 
-    public static String getInputFromUserForPerson(InputReader reader, TypeOfPer type) throws IOException, UserException {
+    public String getInputFromUserForPerson(InputReader reader, TypeOfPer type) throws IOException, UserException {
         String str = reader.readLine();
         boolean check = ObjInputChecker.checkInputForPersonFile(str, type);
         if (check) {
@@ -131,6 +137,10 @@ public class FileReaderMode implements ReadMode {
         } else {
             throw new WrongInputInFileException();
         }
+    }
+
+    public void process() {
+
     }
 
 

@@ -41,8 +41,9 @@ public class InputChecker {
             RainbowPrinter.printInfo("Do you want to " + action + "?" + "(yes/no)");
             InputReader inputReader = new InputReader();
             inputReader.setReader();
-            String input = inputReader.readLine();
-            while(true) {
+            String input = "";
+            while(input.isEmpty()) {
+                input = inputReader.readLine();
                 if(input.equalsIgnoreCase("yes")) {
                     return true;
                 } else if(input.equalsIgnoreCase("no")) {
@@ -51,6 +52,7 @@ public class InputChecker {
                     try {
                         throw new WrongInputException();
                     } catch (WrongInputException e) {
+                        input = "";
                         RainbowPrinter.printError(e.toString());
                     }
                 }

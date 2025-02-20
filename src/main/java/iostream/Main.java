@@ -10,9 +10,9 @@ public class Main {
             RainbowPrinter.printError("Please look at the log file for more details!");
             LogUtil.logStackTrace(e);
         });
-        String filePath = System.getenv("file_name");
         Handler handler = new Handler();
-        //handler.prepare(filePath);
+        /*String filePath = System.getenv("file_name");
+        handler.prepare(filePath);*/
         handler.prepare("/home/cun/IdeaProjects/Lab5/src/main/java/data_files/data.csv");
         handler.run();
     }
