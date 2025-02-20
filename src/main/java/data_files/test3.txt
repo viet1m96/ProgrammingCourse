@@ -1,3 +1,2 @@
-history
-execute_script /home/cun/IdeaProjects/Lab5/src/main/resources/test.txt
-execute_script /home/cun/IdeaProjects/Lab5/src/main/resources/test4.txt
+info
+execute_script /home/cun/IdeaProjects/Lab5/src/main/java/data_files/test.txt

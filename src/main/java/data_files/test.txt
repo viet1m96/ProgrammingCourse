@@ -1,3 +1,2 @@
-help
-execute_script /home/cun/IdeaProjects/Lab5/src/main/resources/test2.txt
-show
+info
+execute_script /home/cun/IdeaProjects/Lab5/src/main/java/data_files/test2.txt

@@ -13,109 +13,88 @@ import java.util.*;
 
 
 public class RecursionController {
-    private LinkedHashMap<String, String> edge;
-    private LinkedHashMap<String, Integer> cyclePath;
-    private LinkedHashMap<String, Integer> timeOfPresent;
+    private LinkedHashMap<String, Integer> cyclePath = new LinkedHashMap<>();
 
-    public RecursionController() {
-        edge = new LinkedHashMap<>();
-        cyclePath = new LinkedHashMap<>();
-        timeOfPresent = new LinkedHashMap<>();
+    public LinkedHashMap<String, String> getNewTrace(LinkedHashMap<String, String> currentTrace, String currentFile, String nextFile) {
+       List<String> cycle = getCyclePath(currentTrace, currentFile, nextFile);
+       List<String> needRemovingVertices = new ArrayList<>();
+       for(int i = 1; i < cycle.size() - 1; i++) {
+           needRemovingVertices.add(cycle.get(i));
+       }
+       LinkedHashMap<String, String> newTrace = new LinkedHashMap<>();
+       currentTrace.forEach((key, value) -> {
+           if(!needRemovingVertices.contains(key)) {
+               newTrace.put(key, value);
+           }
+       });
+       return newTrace;
     }
 
-    public boolean controlRecursion(String nextFile, String currentFile) {
-//        if (nextFile.equals("/home/cun/IdeaProjects/Lab5/src/main/java/data_files/test.txt")) {
-//            edge.forEach((key, value) -> {
-//                System.out.println("Key: " + key + " Value: " + value);
-//            });
-//        }
-        if(timeOfPresent.isEmpty()) {
-            timeOfPresent.put(currentFile, 1);
-        }
-        if(timeOfPresent.containsKey(nextFile)) {
-            timeOfPresent.put(nextFile, timeOfPresent.get(nextFile) + 1);
-        } else {
-            timeOfPresent.put(nextFile, 1);
-        }
-        if(!edge.containsKey(nextFile)) {
-            if(edge.isEmpty()) {
-                edge.put(currentFile, null);
-            }
-            edge.put(nextFile, currentFile);
+    public boolean stopOrNot(LinkedHashMap<String, String> currentTrace, String currentFile, String nextFile) {
+        List<String> cycle = getCyclePath(currentTrace, currentFile, nextFile);
+        String trace = String.join("\n", cycle);
+        if(cyclePath.get(trace) == 0){
+            cyclePath.remove(trace);
             return true;
         } else {
-            String trace = String.join("\n", traceTheCycle(nextFile, currentFile));
-            if(cyclePath.containsKey(trace)) {
-                if(cyclePath.get(trace) == 0) {
-                    cyclePath.remove(trace);
-//                    edge.forEach((key, value) -> {
-//                        System.out.println("Key: " + key + " Value: " + value);
-//                    });
-                    return false;
-                }
-                cyclePath.put(trace, cyclePath.get(trace) - 1);
-                removeCycle(nextFile, currentFile);
-                return true;
-            } else {
-                RainbowPrinter.printCondition("The cycle:");
-                RainbowPrinter.printInfo(trace);
-                if(InputChecker.yesOrNo("read recursively", "Recursion was detected")) {
-                    InputReader inputReader = new InputReader();
-                    inputReader.setReader();
-                    String count = "";
-                    while(count.isEmpty()) {
-                        try {
-                            RainbowPrinter.printInfo("How many times do you want to read recursively?(Enter a positive integer)");
-                            count = inputReader.readLine();
-                            if(!InputChecker.checkIntegerNumber(count) || Integer.parseInt(count) <= 0) throw new WrongInputException();
-                            cyclePath.put(trace, Integer.parseInt(count) - 1);
-                        } catch (IOException e) {
-                            LogUtil.logStackTrace(e);
-                        } catch (WrongInputException e) {
-                            RainbowPrinter.printError(e.toString());
-                            count = "";
-                        }
-                    }
-                    removeCycle(nextFile, currentFile);
-                    return true;
-                } else {
-                    return false;
-                }
-
-            }
+            cyclePath.put(trace, cyclePath.get(trace) - 1);
         }
+        return false;
     }
 
-    private List<String> traceTheCycle(String nextFile, String currentFile) {
+    private List<String> getCyclePath(LinkedHashMap<String, String> currentTrace, String currentFile, String nextFile) {
         List<String> trace = new ArrayList<>();
         String currentInTrace = currentFile;
         while(currentInTrace!= null && !currentInTrace.equals(nextFile)) {
             trace.add(currentInTrace);
-            currentInTrace = edge.get(currentInTrace);
+            currentInTrace = currentTrace.get(currentInTrace);
         }
         trace.add(currentInTrace);
         Collections.reverse(trace);
         trace.add(nextFile);
+
         return trace;
     }
 
-    private void removeCycle(String nextFile, String currentFile) {
-        List<String> trace = traceTheCycle(nextFile, currentFile);
-        trace.forEach(edge::remove);
+    public boolean isRecursion(LinkedHashMap<String, String> currentTrace, String currentFile, String nextFile) {
+        return currentTrace.containsKey(nextFile);
     }
 
 
-    public int timeOP(String fileName) {
-        return timeOfPresent.get(fileName);
+    public boolean isFirstTimeDetected(LinkedHashMap<String, String> currentTrace, String currentFile, String nextFile) {
+        List<String> cycle = getCyclePath(currentTrace, currentFile, nextFile);
+        String trace = String.join("\n", cycle);
+        return !cyclePath.containsKey(trace);
     }
 
-    public void setTimeOP(String fileName, Integer time) {
-        timeOfPresent.put(fileName, timeOfPresent.get(fileName) + time);
+    public Integer askAction(LinkedHashMap<String, String> currentTrace, String currentFile, String nextFile) {
+        List<String> cycle = getCyclePath(currentTrace, currentFile, nextFile);
+        String trace = String.join("\n", cycle);
+        RainbowPrinter.printCondition("The cycle:");
+        RainbowPrinter.printInfo(trace);
+        String count = "";
+        if (InputChecker.yesOrNo("read recursively", "Recursion detected")) {
+            InputReader inputReader = new InputReader();
+            inputReader.setReader();
+            while (count.isEmpty()) {
+                try {
+                    RainbowPrinter.printInfo("How many times do you want to read recursively?(Enter a positive integer)");
+                    count = inputReader.readLine();
+                    if (!InputChecker.checkIntegerNumber(count) || Integer.parseInt(count) <= 0)
+                        throw new WrongInputException();
+                    cyclePath.put(trace, Integer.parseInt(count) - 1);
+                } catch (IOException e) {
+                    LogUtil.logStackTrace(e);
+                } catch (WrongInputException e) {
+                    RainbowPrinter.printError(e.toString());
+                    count = "";
+                }
+            }
+        } else {
+            return null;
+        }
+        return Integer.parseInt(count);
     }
 
-    public void reset(String fileName) {
-        edge.remove(fileName);
-        timeOfPresent.remove(fileName);
-    }
 
 }

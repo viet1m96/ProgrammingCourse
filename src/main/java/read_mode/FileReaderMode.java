@@ -20,6 +20,7 @@ import packets.Request;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class FileReaderMode implements ReadMode {
@@ -37,47 +38,9 @@ public class FileReaderMode implements ReadMode {
 
     @Override
     public void executeMode(Invoker invoker, String nameCommand, String currentFile) throws UserException, LogException {
-        try {
-            invoker.call("execute_script", new Request(null, null));
-            InputReader inputReader = new InputReader();
-            inputReader.setReader(currentFile);
-            String inp;
-            while ((inp = getUserNextCommand(inputReader)) != null) {
-                String nameNewCommand = InputPartition.part1st(inp);
-                String argument = InputPartition.part2nd(inp);
-                NeedInput needInput = commandClassifier.getCommandClassifier(nameNewCommand);
-                RainbowPrinter.printCondition("---" + " Current file: " + currentFile + " ---");
-                switch (needInput) {
-                    case NO_NEED_INPUT -> invoker.call(nameNewCommand, new Request(argument, null));
-                    case NEED_INPUT -> {
-                        if (!nameNewCommand.equals("execute_script")) {
-                            StudyGroup studyGroup = build(inputReader);
-                            try {
-                                invoker.call(nameNewCommand, new Request(argument, studyGroup));
-                            } catch (KeyTakenException e) {
-                                RainbowPrinter.printError(e.toString());
-                            }
-                        } else { // chu trinh con chay xong la chu trinh cha khong chay duoc nua
-                            if(recursionController.controlRecursion(argument, currentFile)) {
-                                executeMode(invoker, nameNewCommand, argument);
-                            }
-                            if(recursionController.timeOP(currentFile) == 1) {
-                                continue;
-                            } else {
-                                recursionController.setTimeOP(currentFile, -1);
-                                return;
-                            }
-
-                        }
-                    }
-                }
-            }
-            recursionController.reset(currentFile);
-        } catch (IOException e) {
-            LogUtil.logStackTrace(e);
-            throw new LogException();
-        }
-
+        LinkedHashMap<String, String> currentTrace = new LinkedHashMap<>();
+        currentTrace.put(currentFile, null);
+        process(currentTrace, currentFile, invoker);
     }
 
     public String getUserNextCommand(InputReader inputReader) throws IOException, UserException, LogException {
@@ -139,8 +102,54 @@ public class FileReaderMode implements ReadMode {
         }
     }
 
-    public void process() {
+    public void process(LinkedHashMap<String, String> currentTrace, String currentFile, Invoker invoker) throws UserException, LogException {
+        try {
+            invoker.call("execute_script", new Request(null, null));
+            InputReader inputReader = new InputReader();
+            inputReader.setReader(currentFile);
+            String inp;
+            while ((inp = getUserNextCommand(inputReader)) != null) {
+                String nameNewCommand = InputPartition.part1st(inp);
+                String argument = InputPartition.part2nd(inp);
+                NeedInput needInput = commandClassifier.getCommandClassifier(nameNewCommand);
+                RainbowPrinter.printCondition("---" + " Current file: " + currentFile + " ---");
+                switch (needInput) {
+                    case NO_NEED_INPUT -> invoker.call(nameNewCommand, new Request(argument, null));
+                    case NEED_INPUT -> {
+                        if (!nameNewCommand.equals("execute_script")) {
+                            StudyGroup studyGroup = build(inputReader);
+                            try {
+                                invoker.call(nameNewCommand, new Request(argument, studyGroup));
+                            } catch (KeyTakenException e) {
+                                RainbowPrinter.printError(e.toString());
+                            }
+                        } else {
+                            if(recursionController.isRecursion(currentTrace, currentFile, argument)) {
+                                if(recursionController.isFirstTimeDetected(currentTrace, currentFile, argument)) {
+                                    Integer times = recursionController.askAction(currentTrace, currentFile, argument);
+                                    if(times != null) {
+                                        LinkedHashMap<String, String> newTrace = recursionController.getNewTrace(currentTrace, currentFile, argument);
+                                        process(newTrace, argument, invoker);
+                                    }
+                                } else {
+                                    if(!recursionController.stopOrNot(currentTrace, currentFile, argument)) {
+                                        LinkedHashMap<String, String> newTrace = recursionController.getNewTrace(currentTrace, currentFile, argument);
+                                        process(newTrace, argument, invoker);
+                                    }
+                                }
+                            } else {
+                                currentTrace.put(argument, currentFile);
+                                process(currentTrace, argument, invoker);
+                            }
+                        }
+                    }
+                }
+            }
 
+        } catch (IOException e) {
+            LogUtil.logStackTrace(e);
+            throw new LogException();
+        }
     }
 
 
