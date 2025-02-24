@@ -22,9 +22,9 @@ import java.util.*;
  */
 public class CollectionManager {
 
-    private LinkedHashMap<String, StudyGroup> collection = new LinkedHashMap<>();
+    private final LinkedHashMap<String, StudyGroup> collection = new LinkedHashMap<>();
     private final String startTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss dd-MM-yyyy"));
-    private String fileName;
+    private final String fileName;
 
     /**
      * Constructs a new {@code CollectionManager} with the specified file name.

@@ -7,8 +7,8 @@ import main_objects.StudyGroup;
  * It is used to encapsulate the data needed for various operations on the collection of study groups.
  */
 public class Request {
-    private String argument;
-    private StudyGroup studyGroup;
+    private final String argument;
+    private final StudyGroup studyGroup;
 
     /**
      * Constructs a new {@code Request} object with the specified argument and {@link StudyGroup}.

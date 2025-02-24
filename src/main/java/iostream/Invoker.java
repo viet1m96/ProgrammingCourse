@@ -13,8 +13,8 @@ import packets.Request;
  * pushes the command to the history, and executes the command.
  */
 public class Invoker {
-    private CommandManager commandManager;
-    private Receiver receiver;
+    private final CommandManager commandManager;
+    private final Receiver receiver;
 
     /**
      * Constructs a new {@code Invoker} with the specified {@link CommandManager} and {@link Receiver}.

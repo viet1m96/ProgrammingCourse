@@ -7,8 +7,8 @@ import java.util.Objects;
  * It stores the x and y values as {@code Integer} objects.
  */
 public class Coordinates {
-    private Integer x;
-    private Integer y;
+    private final Integer x;
+    private final Integer y;
 
     /**
      * Constructs a new {@code Coordinates} object with the specified x and y values.

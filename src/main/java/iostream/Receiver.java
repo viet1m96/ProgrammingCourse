@@ -15,8 +15,8 @@ import packets.Request;
  */
 public class Receiver {
 
-    private CollectionManager collectionManager;
-    private CommandManager commandManager;
+    private final CollectionManager collectionManager;
+    private final CommandManager commandManager;
 
     /**
      * Constructs a new {@code Receiver} with the specified {@link CollectionManager} and {@link CommandManager}.

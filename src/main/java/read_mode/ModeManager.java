@@ -11,7 +11,7 @@ import java.util.HashMap;
  * or reading from a file.  It allows associating specific commands with specific {@link ReadMode} implementations.
  */
 public class ModeManager {
-    private HashMap<String, ReadMode> readModes = new HashMap<>();
+    private final HashMap<String, ReadMode> readModes = new HashMap<>();
 
     /**
      * Initializes the {@code ModeManager} by registering the available reading modes for different commands.

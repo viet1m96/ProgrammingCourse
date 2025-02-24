@@ -30,9 +30,9 @@ import java.util.List;
  */
 public class FileReaderMode implements ReadMode {
 
-    private CommandManager commandManager;
-    private CommandClassifier commandClassifier;
-    private RecursionController recursionController;
+    private final CommandManager commandManager;
+    private final CommandClassifier commandClassifier;
+    private final RecursionController recursionController;
 
     /**
      * Constructs a new {@code FileReaderMode} object.

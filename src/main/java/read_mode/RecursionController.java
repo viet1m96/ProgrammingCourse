@@ -17,7 +17,7 @@ import java.util.*;
  * It helps prevent infinite loops when executing scripts that call each other recursively.
  */
 public class RecursionController {
-    private LinkedHashMap<String, Integer> cyclePath = new LinkedHashMap<>();
+    private final LinkedHashMap<String, Integer> cyclePath = new LinkedHashMap<>();
 
     /**
      * Creates a new trace (a map of file paths) by removing the files that form a cycle.
