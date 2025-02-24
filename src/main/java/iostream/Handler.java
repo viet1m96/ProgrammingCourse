@@ -21,6 +21,11 @@ import read_mode.ModeManager;
 
 import java.io.IOException;
 
+/**
+ * The {@code Handler} class is the main entry point for processing user commands. It initializes and manages
+ * various components, including input reading, command classification, execution, and collection management.
+ * It interacts with the user through the console, providing instructions and feedback.
+ */
 public class Handler {
     private InputReader reader;
     private CollectionManager collectionManager;
@@ -31,11 +36,22 @@ public class Handler {
     private Receiver receiver;
     private Invoker invoker;
 
+    /**
+     * Constructs a new {@code Handler} and prints welcome messages to the console.
+     */
     public Handler() {
         RainbowPrinter.printInfo("Hello! Welcome to my Application!");
         RainbowPrinter.printInfo("Please type 'help' to read the instructions or type 'exit' to exit.");
     }
 
+    /**
+     * Initializes the necessary components for the application, including the {@link InputReader},
+     * {@link FormatChecker}, {@link CommandClassifier}, {@link ModeManager}, {@link CommandManager},
+     * {@link CollectionManager}, {@link Receiver}, and {@link Invoker}. It also uploads data from the
+     * specified file.
+     *
+     * @param fileName The name of the file to upload data from.
+     */
     public void prepare(String fileName) {
         try {
             reader = new InputReader();
@@ -61,8 +77,12 @@ public class Handler {
         }
     }
 
+    /**
+     * Runs the main loop of the application, reading user input, preprocessing it, processing it, and providing feedback.
+     * The loop continues until the application is terminated.
+     */
     public void run() {
-        while(true) {
+        while (true) {
             try {
                 String inp = reader.readLine();
                 inp = inp.trim();
@@ -78,20 +98,33 @@ public class Handler {
         }
     }
 
+    /**
+     * Preprocesses the user input by checking its format and throwing an {@link InputFormatException} if it is invalid.
+     *
+     * @param input The user input to be preprocessed.
+     * @throws InputFormatException If the input format is invalid.
+     */
     public void preprocess(String input) throws InputFormatException {
-        if(!InputChecker.checkInput(input)) {
+        if (!InputChecker.checkInput(input)) {
             throw new InputFormatException();
         }
         formatChecker.checkFormat(InputPartition.part1st(input), InputPartition.part2nd(input));
 
     }
 
+    /**
+     * Processes the user input by classifying the command, retrieving the necessary input mode, and invoking the command.
+     *
+     * @param input The user input to be processed.
+     * @throws UserException If there is an issue with the user-provided data or command execution.
+     * @throws LogException  If there is an issue during logging or command execution.
+     */
     public void process(String input) throws UserException, LogException {
         String nameCommand = InputPartition.part1st(input);
         String argument = InputPartition.part2nd(input);
         NeedInput needInput = commandClassifier.getCommandClassifier(nameCommand);
         switch (needInput) {
-            case NO_NEED_INPUT -> invoker.call(nameCommand,  new Request(argument, null));
+            case NO_NEED_INPUT -> invoker.call(nameCommand, new Request(argument, null));
             case NEED_INPUT -> modeManager.call(invoker, nameCommand, argument);
         }
     }

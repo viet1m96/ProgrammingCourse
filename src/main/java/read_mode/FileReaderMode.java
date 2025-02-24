@@ -15,6 +15,7 @@ import io_utilities.printers.RainbowPrinter;
 import io_utilities.working_with_input.*;
 import iostream.Invoker;
 import main_objects.StudyGroup;
+import main_objects.Person;
 import packets.Request;
 
 import java.io.IOException;
@@ -23,11 +24,20 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+/**
+ * The {@code FileReaderMode} class implements the {@link ReadMode} interface and provides
+ * functionality to read commands and data from a file and execute them.
+ */
 public class FileReaderMode implements ReadMode {
 
     private CommandManager commandManager;
     private CommandClassifier commandClassifier;
     private RecursionController recursionController;
+
+    /**
+     * Constructs a new {@code FileReaderMode} object.
+     * Initializes the {@link CommandManager}, {@link CommandClassifier}, and {@link RecursionController}.
+     */
     public FileReaderMode() {
         commandManager = new CommandManager();
         commandClassifier = new CommandClassifier();
@@ -36,6 +46,16 @@ public class FileReaderMode implements ReadMode {
         commandClassifier.init();
     }
 
+    /**
+     * Executes the file reading mode by reading commands and data from the specified file
+     * and executing them using the provided {@link Invoker}.
+     *
+     * @param invoker     The {@link Invoker} object to execute commands.
+     * @param nameCommand The name of the command to execute (not used in this implementation).
+     * @param currentFile The path to the file to read commands from.
+     * @throws UserException If the file contains invalid commands or data.
+     * @throws LogException  If an I/O error occurs while reading the file.
+     */
     @Override
     public void executeMode(Invoker invoker, String nameCommand, String currentFile) throws UserException, LogException {
         LinkedHashMap<String, String> currentTrace = new LinkedHashMap<>();
@@ -43,6 +63,15 @@ public class FileReaderMode implements ReadMode {
         process(currentTrace, currentFile, invoker);
     }
 
+    /**
+     * Reads the next command from the input file.
+     *
+     * @param inputReader The {@link InputReader} object to read from the file.
+     * @return The next command from the file, or {@code null} if the end of the file is reached.
+     * @throws IOException          If an I/O error occurs while reading the file.
+     * @throws UserException        If the command is invalid or the input is incorrect.
+     * @throws LogException         If a logging error occurs.
+     */
     public String getUserNextCommand(InputReader inputReader) throws IOException, UserException, LogException {
         String input = inputReader.readLine();
         if (input == null || input.isEmpty()) return null;
@@ -54,6 +83,14 @@ public class FileReaderMode implements ReadMode {
         return input;
     }
 
+    /**
+     * Builds a {@link StudyGroup} object by reading data from the input file.
+     *
+     * @param reader The {@link InputReader} object to read data from the file.
+     * @return The constructed {@link StudyGroup} object.
+     * @throws UserException If the file contains invalid data.
+     * @throws LogException  If an I/O error occurs while reading the file.
+     */
     public StudyGroup build(InputReader reader) throws UserException, LogException {
         List<String> groupInfo = new ArrayList<>();
         List<String> adminInfo = new ArrayList<>();
@@ -82,6 +119,15 @@ public class FileReaderMode implements ReadMode {
         return StudyGroupBuilder.parseStudyGroup(groupInfo, adminInfo);
     }
 
+    /**
+     * Reads a single input for a {@link StudyGroup} object from the input file.
+     *
+     * @param reader The {@link InputReader} object to read from the file.
+     * @param type   The {@link TypeOfGrp} enum indicating the type of input to read.
+     * @return The input read from the file.
+     * @throws IOException   If an I/O error occurs while reading the file.
+     * @throws UserException If the input is invalid.
+     */
     public String getInputFromUserForGroup(InputReader reader, TypeOfGrp type) throws IOException, UserException {
         String str = reader.readLine();
         boolean check = ObjInputChecker.checkInputForGroupFile(str, type);
@@ -92,6 +138,15 @@ public class FileReaderMode implements ReadMode {
         }
     }
 
+    /**
+     * Reads a single input for a {@link Person} object from the input file.
+     *
+     * @param reader The {@link InputReader} object to read from the file.
+     * @param type   The {@link TypeOfPer} enum indicating the type of input to read.
+     * @return The input read from the file.
+     * @throws IOException   If an I/O error occurs while reading the file.
+     * @throws UserException If the input is invalid.
+     */
     public String getInputFromUserForPerson(InputReader reader, TypeOfPer type) throws IOException, UserException {
         String str = reader.readLine();
         boolean check = ObjInputChecker.checkInputForPersonFile(str, type);
@@ -102,6 +157,15 @@ public class FileReaderMode implements ReadMode {
         }
     }
 
+    /**
+     * Processes the commands in the specified file.
+     *
+     * @param currentTrace A map to track the files currently being processed, used to detect recursion.
+     * @param currentFile  The path to the file to process.
+     * @param invoker      The {@link Invoker} object to execute commands.
+     * @throws UserException If the file contains invalid commands or data, or if recursion is detected.
+     * @throws LogException  If an I/O error occurs while reading the file.
+     */
     public void process(LinkedHashMap<String, String> currentTrace, String currentFile, Invoker invoker) throws UserException, LogException {
         try {
             invoker.call("execute_script", new Request(null, null));
@@ -124,15 +188,15 @@ public class FileReaderMode implements ReadMode {
                                 RainbowPrinter.printError(e.toString());
                             }
                         } else {
-                            if(recursionController.isRecursion(currentTrace, currentFile, argument)) {
-                                if(recursionController.isFirstTimeDetected(currentTrace, currentFile, argument)) {
+                            if (recursionController.isRecursion(currentTrace, currentFile, argument)) {
+                                if (recursionController.isFirstTimeDetected(currentTrace, currentFile, argument)) {
                                     Integer times = recursionController.askAction(currentTrace, currentFile, argument);
-                                    if(times != null) {
+                                    if (times != null) {
                                         LinkedHashMap<String, String> newTrace = recursionController.getNewTrace(currentTrace, currentFile, argument);
                                         process(newTrace, argument, invoker);
                                     }
                                 } else {
-                                    if(!recursionController.stopOrNot(currentTrace, currentFile, argument)) {
+                                    if (!recursionController.stopOrNot(currentTrace, currentFile, argument)) {
                                         LinkedHashMap<String, String> newTrace = recursionController.getNewTrace(currentTrace, currentFile, argument);
                                         process(newTrace, argument, invoker);
                                     }
@@ -151,6 +215,4 @@ public class FileReaderMode implements ReadMode {
             throw new LogException();
         }
     }
-
-
 }

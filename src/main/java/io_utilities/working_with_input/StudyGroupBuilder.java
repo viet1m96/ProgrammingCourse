@@ -6,7 +6,6 @@ import enums.Semester;
 import exceptions.LogUtil;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.UserException;
-import exceptions.user_exceptions.WrongInputException;
 import exceptions.user_exceptions.WrongInputInFileException;
 import main_objects.Coordinates;
 import main_objects.Location;
@@ -18,7 +17,25 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.List;
 
+/**
+ * The {@code StudyGroupBuilder} class provides static methods for parsing data from a list of strings and constructing
+ * {@link main_objects.StudyGroup} and related objects ({@link main_objects.Person}, {@link main_objects.Location}, {@link main_objects.Coordinates}).
+ * It handles parsing and validation of data, including handling "null" values from files and throwing appropriate exceptions
+ * if parsing fails or data is invalid.
+ */
 public class StudyGroupBuilder {
+
+    /**
+     * Parses a list of strings representing StudyGroup and Person (admin) data and constructs a {@link main_objects.StudyGroup} object.
+     *
+     * @param groupInfo  A list of strings containing the StudyGroup information. The order of elements is assumed to be:
+     *                   [id, name, coordinateX, coordinateY, creationDate, studentsCount, expelledStudentsCount, formOfEducation, semester].
+     * @param adminInfo  A list of strings containing the Person (admin) information. The order of elements is assumed to be:
+     *                   [name, birthday, weight, eyeColor, locationX, locationY, locationZ, locationName].
+     * @return A {@link main_objects.StudyGroup} object constructed from the parsed data.
+     * @throws UserException If there is an issue with the user-provided data (e.g., incorrect format).
+     * @throws LogException  If there is an issue during logging or parsing.
+     */
     public static StudyGroup parseStudyGroup(List<String> groupInfo, List<String> adminInfo) throws UserException, LogException {
         StudyGroup studyGroup = new StudyGroup();
         try {
@@ -41,13 +58,13 @@ public class StudyGroupBuilder {
 
             Long expelledStudentsCount = Long.parseLong(groupInfo.get(6));
             studyGroup.setExpelledStudents(expelledStudentsCount);
-            
-            if(groupInfo.get(7).equals("null")) {
+
+            if (groupInfo.get(7).equals("null")) {
                 studyGroup.setFormOfEducation(null);
             } else {
                 studyGroup.setFormOfEducation(FormOfEducation.valueOf(groupInfo.get(7).toUpperCase()));
             }
-            
+
             Semester semester = Semester.valueOf(groupInfo.get(8).toUpperCase());
             studyGroup.setSemesterEnum(semester);
             studyGroup.setGroupAdmin(parsePerson(adminInfo));
@@ -58,18 +75,27 @@ public class StudyGroupBuilder {
         return studyGroup;
     }
 
+    /**
+     * Parses a list of strings representing Person data and constructs a {@link main_objects.Person} object.
+     *
+     * @param adminInfo A list of strings containing the Person information. The order of elements is assumed to be:
+     *                  [name, birthday, weight, eyeColor, locationX, locationY, locationZ, locationName].
+     * @return A {@link main_objects.Person} object constructed from the parsed data.
+     * @throws UserException If there is an issue with the user-provided data (e.g., incorrect format).
+     * @throws LogException  If there is an issue during logging or parsing.
+     */
     private static Person parsePerson(List<String> adminInfo) throws UserException, LogException {
         Person admin = new Person();
         try {
             admin.setName(adminInfo.get(0));
 
-            if(adminInfo.get(1).equals("null")) {
+            if (adminInfo.get(1).equals("null")) {
                 admin.setBirthDay(null);
             } else {
                 admin.setBirthDay(LocalDate.parse(adminInfo.get(1), DateTimeFormatter.ofPattern("dd-MM-yyyy")));
             }
 
-            if(adminInfo.get(2).equals("null")) {
+            if (adminInfo.get(2).equals("null")) {
                 admin.setWeight(null);
             } else {
                 admin.setWeight(Integer.parseInt(adminInfo.get(2)));
@@ -86,19 +112,28 @@ public class StudyGroupBuilder {
         return admin;
     }
 
+    /**
+     * Parses a list of strings representing Location data and constructs a {@link main_objects.Location} object.
+     *
+     * @param adminInfo A list of strings containing the Location information within the Person's admin info. The order of elements is assumed to be:
+     *                  [..., locationX, locationY, locationZ, locationName].
+     * @return A {@link main_objects.Location} object constructed from the parsed data, or null if all location fields are "null".
+     * @throws LogException  If there is an issue during logging or parsing.
+     * @throws UserException If there is an issue with the user-provided data (e.g., inconsistent null values).
+     */
     private static Location parseLocation(List<String> adminInfo) throws LogException, UserException {
         Location location = new Location();
         try {
-            if(adminInfo.get(4).equals("null") && adminInfo.get(5).equals("null") && adminInfo.get(6).equals("null")) {
-                if(!adminInfo.get(7).equals("null")) throw new WrongInputInFileException();
-                location = null;
-            } else if(adminInfo.get(4).equals("null") || adminInfo.get(5).equals("null") || adminInfo.get(6).equals("null")) {
-                throw new WrongInputInFileException();
+            if (adminInfo.get(4).equals("null") && adminInfo.get(5).equals("null") && adminInfo.get(6).equals("null")) {
+                if (!adminInfo.get(7).equals("null")) throw new WrongInputInFileException();
+                return null; //  Return null if all location fields are null.
+            } else if (adminInfo.get(4).equals("null") || adminInfo.get(5).equals("null") || adminInfo.get(6).equals("null")) {
+                throw new WrongInputInFileException(); //  Throw exception if some location fields are null, but not all.
             } else {
                 location.setX(Long.parseLong(adminInfo.get(4)));
                 location.setY(Integer.parseInt(adminInfo.get(5)));
                 location.setZ(Integer.parseInt(adminInfo.get(6)));
-                if(adminInfo.get(7).equals("null")) {
+                if (adminInfo.get(7).equals("null")) {
                     location.setName(null);
                 } else {
                     location.setName(adminInfo.get(7));

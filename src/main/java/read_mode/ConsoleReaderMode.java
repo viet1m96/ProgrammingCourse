@@ -21,10 +21,26 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The {@code ConsoleReaderMode} class implements the {@link ReadMode} interface and provides
+ * functionality to read input from the console and build a {@link StudyGroup} object.
+ */
 public class ConsoleReaderMode implements ReadMode {
 
-    public ConsoleReaderMode() {}
+    /**
+     * Constructs a new {@code ConsoleReaderMode} object.
+     */
+    public ConsoleReaderMode() {
+    }
 
+    /**
+     * Builds a {@link StudyGroup} object by reading input from the user via the console.
+     *
+     * @param reader The {@link InputReader} object to read input from the console.
+     * @return The constructed {@link StudyGroup} object.
+     * @throws UserException If the user provides invalid input.
+     * @throws LogException  If an I/O error occurs while reading input.
+     */
     public static StudyGroup build(InputReader reader) throws UserException, LogException {
         List<String> groupInfo = new ArrayList<>();
         List<String> adminInfo = new ArrayList<>();
@@ -46,13 +62,13 @@ public class ConsoleReaderMode implements ReadMode {
             adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.BIRTHDAY, "Birthday", "Must be in this form: DD-MM-YYYY(Not necessary)"));
             adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.WEIGHT, "Weight", "Must be an integer greater than 0 (Not necessary)"));
             adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.COLOR, "eyeColor", "Must be one of these following types: RED, BLACK, BLUE, ORANGE, BROWN"));
-            if(InputChecker.yesOrNo("share", "Location of admin:")) {
+            if (InputChecker.yesOrNo("share", "Location of admin:")) {
                 adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.X, "Coordinate X of admin", "Must be an integer greater than 0"));
                 adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.Y, "Coordinate Y of admin", "Must be an integer greater than 0"));
                 adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.Z, "Coordinate Z of admin", "Must be an integer greater than 0"));
                 adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.LOCATION, "The location of admin(where)", "Must not be empty(Not necessary)"));
             } else {
-                for(int i = 0; i < 4; i++) adminInfo.add("null");
+                for (int i = 0; i < 4; i++) adminInfo.add("null");
             }
         } catch (IOException e) {
             LogUtil.logStackTrace(e);
@@ -61,6 +77,16 @@ public class ConsoleReaderMode implements ReadMode {
         return StudyGroupBuilder.parseStudyGroup(groupInfo, adminInfo);
     }
 
+    /**
+     * Gets input from the user for a {@link StudyGroup} object.
+     *
+     * @param reader    The {@link InputReader} object to read input from the console.
+     * @param type      The {@link TypeOfGrp} enum representing the type of input to get.
+     * @param notice    The message to display to the user.
+     * @param condition The condition that the input must satisfy.
+     * @return The input from the user.
+     * @throws IOException If an I/O error occurs while reading input.
+     */
     public static String getInputFromUserForGroup(InputReader reader, TypeOfGrp type, String notice, String condition) throws IOException {
         boolean check = false;
         String tmp = "";
@@ -70,7 +96,7 @@ public class ConsoleReaderMode implements ReadMode {
                 String str = reader.readLine();
                 check = ObjInputChecker.checkInputForGroupConsole(str, type);
                 if (check) {
-                    if(str == null || str.isEmpty()) {
+                    if (str == null || str.isEmpty()) {
                         tmp = "null";
                     } else {
                         tmp = str;
@@ -86,6 +112,16 @@ public class ConsoleReaderMode implements ReadMode {
         return tmp;
     }
 
+    /**
+     * Gets input from the user for a {@link Person} object.
+     *
+     * @param reader    The {@link InputReader} object to read input from the console.
+     * @param type      The {@link TypeOfPer} enum representing the type of input to get.
+     * @param notice    The message to display to the user.
+     * @param condition The condition that the input must satisfy.
+     * @return The input from the user.
+     * @throws IOException If an I/O error occurs while reading input.
+     */
     public static String getInputFromUserForPerson(InputReader reader, TypeOfPer type, String notice, String condition) throws IOException {
         boolean check = false;
         String tmp = "";
@@ -95,7 +131,7 @@ public class ConsoleReaderMode implements ReadMode {
                 String str = reader.readLine();
                 check = ObjInputChecker.checkInputForPersonConsole(str, type);
                 if (check) {
-                    if(str == null || str.isEmpty()) {
+                    if (str == null || str.isEmpty()) {
                         tmp = "null";
                         break;
                     }
@@ -111,6 +147,16 @@ public class ConsoleReaderMode implements ReadMode {
         return tmp;
     }
 
+    /**
+     * Executes the console reading mode by reading input from the console, building a {@link StudyGroup} object,
+     * and calling the specified command with the constructed {@link Request}.
+     *
+     * @param invoker     The {@link Invoker} object to call the command.
+     * @param nameCommand The name of the command to call.
+     * @param arg         The argument for the command.
+     * @throws UserException If the user provides invalid input.
+     * @throws LogException  If an I/O error occurs while reading input.
+     */
     @Override
     public void executeMode(Invoker invoker, String nameCommand, String arg) throws UserException, LogException {
         InputReader reader = new InputReader();

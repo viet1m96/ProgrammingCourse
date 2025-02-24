@@ -1,3 +1,2 @@
 info
 execute_script /home/cun/IdeaProjects/Lab5/src/main/java/data_files/test.txt
-execute_script /home/cun/IdeaProjects/Lab5/src/main/java/data_files/test3.txt

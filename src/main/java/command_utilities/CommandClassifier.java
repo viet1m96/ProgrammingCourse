@@ -4,10 +4,18 @@ import enums.NeedInput;
 
 import java.util.HashMap;
 
+/**
+ * The {@code CommandClassifier} class is responsible for classifying commands and determining
+ * whether they require input or not. It uses a HashMap to store the command-to-NeedInput mapping.
+ */
 public class CommandClassifier {
 
     private final HashMap<String, NeedInput> commandClassifiers = new HashMap<>();
 
+    /**
+     * Initializes the command classifiers by registering each command and its corresponding
+     * NeedInput value.
+     */
     public void init() {
         registerClassifier("help", NeedInput.NO_NEED_INPUT);
         registerClassifier("clear", NeedInput.NO_NEED_INPUT);
@@ -27,9 +35,22 @@ public class CommandClassifier {
         registerClassifier("replace_if_lower", NeedInput.NEED_INPUT);
     }
 
+    /**
+     * Registers a command with its corresponding NeedInput value.
+     *
+     * @param command   The command to register.
+     * @param needInput The NeedInput value for the command.
+     */
     public void registerClassifier(String command, NeedInput needInput) {
         commandClassifiers.put(command, needInput);
     }
+
+    /**
+     * Retrieves the NeedInput value for a given command.
+     *
+     * @param command The command to retrieve the NeedInput value for.
+     * @return The NeedInput value for the command, or null if the command is not registered.
+     */
     public NeedInput getCommandClassifier(String command) {
         return commandClassifiers.get(command);
     }

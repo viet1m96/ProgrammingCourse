@@ -5,6 +5,7 @@ import enums.TypeOfPer;
 import exceptions.LogUtil;
 import exceptions.user_exceptions.WrongUploadingDataException;
 import io_utilities.working_with_input.ObjInputChecker;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,11 +13,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * The {@code DataFromFileProcessor} class is responsible for validating and processing data read from a CSV file.
+ * It checks the format and validity of the data for both {@link main_objects.StudyGroup} and {@link main_objects.Person} objects.
+ * It uses {@link ObjInputChecker} to perform specific checks on individual data fields.
+ */
 public class DataFromFileProcessor {
 
+    /**
+     * Constructs a new {@code DataFromFileProcessor}.
+     */
     public DataFromFileProcessor() {
     }
 
+    /**
+     * Checks the validity of the data related to a {@link main_objects.StudyGroup} object.
+     * It splits the input string into tokens and checks each token against predefined criteria using {@link ObjInputChecker}.
+     *
+     * @param str The string containing the comma-separated data for a {@link main_objects.StudyGroup} object.
+     * @return A list of strings representing the validated tokens.
+     * @throws WrongUploadingDataException If the number of tokens is incorrect or if any of the tokens fail the validation checks.
+     */
     public List<String> checkGroupInfo(String str) throws WrongUploadingDataException {
         List<String> tokens = Arrays.asList(str.split(","));
         if (tokens.size() != 17) {
@@ -47,6 +64,14 @@ public class DataFromFileProcessor {
         return tokens;
     }
 
+    /**
+     * Checks the validity of the data related to a {@link main_objects.Person} object.
+     * It extracts the relevant tokens from the input string and checks each token against predefined criteria using {@link ObjInputChecker}.
+     *
+     * @param str The string containing the comma-separated data for a {@link main_objects.StudyGroup} and {@link main_objects.Person} object.
+     * @return A list of strings representing the validated tokens for the {@link main_objects.Person} object.
+     * @throws WrongUploadingDataException If any of the tokens fail the validation checks.
+     */
     public List<String> checkPerInfo(String str) throws WrongUploadingDataException {
         List<String> tokens = Arrays.asList(str.split(","));
         List<Boolean> boolList = new ArrayList<>();
