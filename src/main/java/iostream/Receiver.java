@@ -43,6 +43,7 @@ public class Receiver {
         commandManager.getCommandCollection().forEach((name, command) -> {
             command.getCommandInfo();
         });
+        RainbowPrinter.printResult("[Key/id is a positive integer.]");
     }
 
     /**
