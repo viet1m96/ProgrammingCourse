@@ -1,0 +1,23 @@
+2025-03-08 00:20:20.224 [main] ERROR - Stack trace
+java.io.FileNotFoundException: asdfasdf (No such file or directory)
+	at java.base/java.io.FileInputStream.open0(Native Method)
+	at java.base/java.io.FileInputStream.open(FileInputStream.java:216)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:157)
+	at java.base/java.io.FileInputStream.<init>(FileInputStream.java:111)
+	at read_mode.FileReaderMode.process(FileReaderMode.java:109)
+	at read_mode.FileReaderMode.executeMode(FileReaderMode.java:45)
+	at read_mode.ModeManager.call(ModeManager.java:49)
+	at iostream.Controller.processInput(Controller.java:88)
+	at iostream.Controller.run(Controller.java:62)
+	at iostream.Main.main(Main.java:15)
+2025-03-08 00:24:11.665 [main] ERROR - Stack trace
+java.net.PortUnreachableException
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive0(Native Method)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receiveIntoNativeBuffer(DatagramChannelImpl.java:750)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:736)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:543)
+	at network.Receiver.getAResponse(Receiver.java:21)
+	at network.Transporter.transport(Transporter.java:60)
+	at iostream.Controller.processInput(Controller.java:85)
+	at iostream.Controller.run(Controller.java:62)
+	at iostream.Main.main(Main.java:15)

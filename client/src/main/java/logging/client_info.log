@@ -1,0 +1,11 @@
+2025-03-08 00:19:40.526 [main] INFO  - Client side was initialized.
+2025-03-08 00:20:03.622 [main] INFO  - Client side was initialized.
+2025-03-08 00:20:05.417 [main] INFO  - The help command is being sent from port /127.0.0.1:46633
+2025-03-08 00:20:05.422 [main] INFO  - Received response at port /127.0.0.1:46633
+2025-03-08 00:20:06.822 [main] INFO  - The show command is being sent from port /127.0.0.1:43449
+2025-03-08 00:20:06.824 [main] INFO  - Received response at port /127.0.0.1:43449
+2025-03-08 00:23:58.284 [main] INFO  - Client side was initialized.
+2025-03-08 00:24:08.472 [main] INFO  - Client side was initialized.
+2025-03-08 00:24:11.664 [main] INFO  - The help command is being sent from port /127.0.0.1:36419
+2025-03-08 00:24:59.381 [main] INFO  - Client side was initialized.
+2025-03-08 00:25:00.699 [main] INFO  - Client side was closed.

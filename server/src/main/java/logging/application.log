@@ -1,0 +1,130 @@
+2025-03-07 23:17:29.663 [main] INFO  - The server was started!
+2025-03-07 23:17:29.675 [main] INFO  - The data is being uploaded...
+2025-03-07 23:17:29.676 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:17:29.677 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:17:30.505 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:18:24.900 [main] INFO  - The server was started!
+2025-03-07 23:18:24.906 [main] INFO  - The data is being uploaded...
+2025-03-07 23:18:24.907 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:18:24.911 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:18:25.780 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:18:25.781 [Thread-0] INFO  - The save command is requested!
+2025-03-07 23:18:25.781 [Thread-0] INFO  - The command was successfully executed!
+2025-03-07 23:19:19.464 [main] INFO  - The server was started!
+2025-03-07 23:19:19.474 [main] INFO  - The data is being uploaded...
+2025-03-07 23:19:19.476 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:19:19.477 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:19:20.277 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:19:20.277 [Thread-0] INFO  - The server was stopped during emergency shutdown!
+2025-03-07 23:19:20.278 [Thread-0] INFO  - The save command is requested!
+2025-03-07 23:19:38.490 [main] INFO  - The server was started!
+2025-03-07 23:19:38.504 [main] INFO  - The data is being uploaded...
+2025-03-07 23:19:38.505 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:19:38.506 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:19:39.287 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:19:39.287 [Thread-0] INFO  - The save command is requested!
+2025-03-07 23:19:39.288 [Thread-0] INFO  - The command was successfully executed!
+2025-03-07 23:24:26.627 [main] INFO  - The server was started!
+2025-03-07 23:24:26.639 [main] INFO  - The data is being uploaded...
+2025-03-07 23:24:26.640 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:24:26.641 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:24:30.848 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:24:30.848 [Thread-0] INFO  - The save command is requested!
+2025-03-07 23:24:58.100 [main] INFO  - The server was started!
+2025-03-07 23:24:58.107 [main] INFO  - The data is being uploaded...
+2025-03-07 23:24:58.108 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:24:58.109 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:24:59.538 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-07 23:24:59.538 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:24:59.538 [Thread-0] INFO  - The save command is requested!
+2025-03-07 23:24:59.539 [Thread-0] INFO  - The command was successfully executed!
+2025-03-07 23:44:50.748 [main] INFO  - The server was started!
+2025-03-07 23:44:50.755 [main] INFO  - The data is being uploaded...
+2025-03-07 23:44:50.756 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:44:50.756 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:44:55.478 [main] INFO  - The show command is requested by /127.0.0.1:34881
+2025-03-07 23:44:55.480 [main] INFO  - The response has been sent to /127.0.0.1:34881.
+2025-03-07 23:44:57.444 [main] INFO  - The help command is requested by /127.0.0.1:47996
+2025-03-07 23:44:57.446 [main] INFO  - The response has been sent to /127.0.0.1:47996.
+2025-03-07 23:44:58.629 [main] INFO  - The info command is requested by /127.0.0.1:59176
+2025-03-07 23:44:58.629 [main] INFO  - The response has been sent to /127.0.0.1:59176.
+2025-03-07 23:45:01.164 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-07 23:45:01.164 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:45:01.164 [Thread-0] INFO  - The save command is requested!
+2025-03-07 23:52:06.173 [main] INFO  - The server was started!
+2025-03-07 23:52:06.180 [main] INFO  - The data is being uploaded...
+2025-03-07 23:52:06.180 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:52:06.181 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:52:09.374 [main] INFO  - The help command is requested by /127.0.0.1:59116
+2025-03-07 23:52:09.375 [main] INFO  - The response has been sent to /127.0.0.1:59116.
+2025-03-07 23:52:10.636 [main] INFO  - The show command is requested by /127.0.0.1:45531
+2025-03-07 23:52:10.636 [main] INFO  - The response has been sent to /127.0.0.1:45531.
+2025-03-07 23:52:12.896 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:52:12.896 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-07 23:52:12.897 [Thread-0] INFO  - The save command is requested!
+2025-03-07 23:57:14.903 [main] INFO  - The server was started!
+2025-03-07 23:57:14.910 [main] INFO  - The data is being uploaded...
+2025-03-07 23:57:14.910 [main] INFO  - The process of uploading data finished!
+2025-03-07 23:57:14.911 [main] INFO  - The server is listening on port 4999
+2025-03-07 23:57:16.307 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-07 23:57:16.307 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-07 23:57:16.308 [Thread-0] INFO  - The save command is requested!
+2025-03-08 00:08:13.847 [main] INFO  - The server was started!
+2025-03-08 00:08:13.855 [main] INFO  - The data is being uploaded...
+2025-03-08 00:08:13.855 [main] INFO  - The process of uploading data finished!
+2025-03-08 00:08:13.856 [main] INFO  - The server is listening on port 4999
+2025-03-08 00:08:21.615 [main] INFO  - The help command is requested by /127.0.0.1:34491
+2025-03-08 00:08:21.616 [main] INFO  - The response has been sent to /127.0.0.1:34491.
+2025-03-08 00:08:27.066 [main] INFO  - The exit command is requested!
+2025-03-08 00:08:27.066 [main] INFO  - The exit command was requested, backup process is being executed.
+2025-03-08 00:08:27.068 [main] INFO  - The exit command was executed.
+2025-03-08 00:08:27.068 [main] INFO  - The server was stopped!
+2025-03-08 00:08:27.070 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-08 00:08:27.070 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-08 00:08:27.071 [Thread-0] INFO  - The save command is requested!
+2025-03-08 00:08:27.071 [Thread-0] INFO  - The command was successfully executed!
+2025-03-08 00:11:51.226 [main] INFO  - The server was started!
+2025-03-08 00:11:51.236 [main] INFO  - The data is being uploaded...
+2025-03-08 00:11:51.237 [main] INFO  - The process of uploading data finished!
+2025-03-08 00:11:51.238 [main] INFO  - The server is listening on port 4999
+2025-03-08 00:11:55.693 [main] INFO  - The help command is requested by /127.0.0.1:46549
+2025-03-08 00:11:55.695 [main] INFO  - The response has been sent to /127.0.0.1:46549.
+2025-03-08 00:11:57.998 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-08 00:11:57.998 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-08 00:11:57.998 [Thread-0] INFO  - The save command is requested!
+2025-03-08 00:11:57.999 [Thread-0] INFO  - The command was successfully executed!
+2025-03-08 00:12:28.628 [main] INFO  - The server was started!
+2025-03-08 00:12:28.644 [main] INFO  - The data is being uploaded...
+2025-03-08 00:12:28.645 [main] INFO  - The process of uploading data finished!
+2025-03-08 00:12:28.646 [main] INFO  - The server is listening on port 4999
+2025-03-08 00:12:32.009 [main] INFO  - The help command is requested by /127.0.0.1:60679
+2025-03-08 00:12:32.012 [main] INFO  - The response has been sent to /127.0.0.1:60679.
+2025-03-08 00:12:35.283 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-08 00:12:35.283 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-08 00:12:35.284 [Thread-0] INFO  - The save command is requested!
+2025-03-08 00:12:35.284 [Thread-0] INFO  - The command was successfully executed!
+2025-03-08 00:13:14.466 [main] INFO  - The server was started!
+2025-03-08 00:13:14.474 [main] INFO  - The data is being uploaded...
+2025-03-08 00:13:14.474 [main] INFO  - The process of uploading data finished!
+2025-03-08 00:13:14.475 [main] INFO  - The server is listening on port 4999
+2025-03-08 00:13:17.397 [main] INFO  - The help command is requested by /127.0.0.1:36971
+2025-03-08 00:13:17.400 [main] INFO  - The response has been sent to /127.0.0.1:36971.
+2025-03-08 00:14:18.918 [main] INFO  - The save command is requested!
+2025-03-08 00:14:18.919 [main] INFO  - The command was successfully executed!
+2025-03-08 00:14:18.919 [main] INFO  - The server was stopped during long time waiting!
+2025-03-08 00:14:18.920 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-08 00:14:18.921 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-08 00:14:18.921 [Thread-0] INFO  - The save command is requested!
+2025-03-08 00:14:18.921 [Thread-0] INFO  - The command was successfully executed!
+2025-03-08 00:20:02.610 [main] INFO  - The server was started!
+2025-03-08 00:20:02.620 [main] INFO  - The data is being uploaded...
+2025-03-08 00:20:02.620 [main] INFO  - The process of uploading data finished!
+2025-03-08 00:20:02.621 [main] INFO  - The server is listening on port 4999
+2025-03-08 00:20:05.419 [main] INFO  - The help command is requested by /127.0.0.1:46633
+2025-03-08 00:20:05.421 [main] INFO  - The response has been sent to /127.0.0.1:46633.
+2025-03-08 00:20:06.823 [main] INFO  - The show command is requested by /127.0.0.1:43449
+2025-03-08 00:20:06.823 [main] INFO  - The response has been sent to /127.0.0.1:43449.
+2025-03-08 00:20:25.408 [Thread-0] INFO  - A emergency shutdown process has been called!
+2025-03-08 00:20:25.408 [Thread-0] INFO  - Shutting down, a backup process is being executed...
+2025-03-08 00:20:25.409 [Thread-0] INFO  - The save command is requested!
+2025-03-08 00:20:25.409 [Thread-0] INFO  - The command was successfully executed!
