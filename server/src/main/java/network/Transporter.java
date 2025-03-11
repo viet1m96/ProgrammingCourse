@@ -34,7 +34,7 @@ public class Transporter {
         try {
             serverChannel = DatagramChannel.open();
             serverChannel.configureBlocking(false);
-            serverChannel.bind(new InetSocketAddress("localhost", PORT));
+            serverChannel.socket().bind(new InetSocketAddress("0.0.0.0", PORT));
             selector = Selector.open();
             serverChannel.register(selector, SelectionKey.OP_READ);
             receipient = new Recipient();
