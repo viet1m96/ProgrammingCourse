@@ -1,0 +1,30 @@
+package handler;
+
+import commands.Command;
+import exceptions.database_exception.PostgresException;
+import exceptions.log_exceptions.LogException;
+import exceptions.user_exceptions.UserException;
+import goods.Request;
+import goods.Response;
+import logging.LogUtil;
+import printer_options.RainbowPrinter;
+
+import java.net.SocketAddress;
+
+public class Invoker {
+    private final CommandManager commandManager;
+    private final Receiver receiver;
+
+    public Invoker(CommandManager commandManager, Receiver receiver) {
+        this.commandManager = commandManager;
+        this.receiver = receiver;
+    }
+
+    public Response call(Request request) throws UserException, LogException, PostgresException {
+        RainbowPrinter.printCondition(">" + "The " + request.getCmd() + " command is requested by " + request.getRemoteAddress());
+        LogUtil.logInfo("The " + request.getCmd() + " command is requested by " + request.getRemoteAddress());
+        Command command = commandManager.getCommand(request.getCmd());
+        command.setReceiver(receiver);
+        return command.execute(request);
+    }
+}
