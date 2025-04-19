@@ -80,10 +80,12 @@ public class Controller {
                         break;
                 }
             } catch (IOException e) {
-                RainbowPrinter.printError("There was an error with reading input!");
-                RainbowPrinter.printError(new LogException().toString());
+                RainbowPrinter.printError("There was an error with input reading!");
                 LogUtil.logTrace(e);
-            } catch (UserException | LogException | NetworkException e) {
+            } catch (UserException | NetworkException e) {
+                RainbowPrinter.printError(e.toString());
+            } catch (LogException e) {
+                RainbowPrinter.printError(e.getMessage());
                 RainbowPrinter.printError(e.toString());
             }
         }

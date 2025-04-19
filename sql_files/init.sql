@@ -25,6 +25,11 @@ create type color as enum (
     'BROWN'
     );
 
+create table client_accounts (
+    username varchar(20) not null primary key,
+    password varchar(40) not null
+);
+
 create table study_groups (
                               search_key text unique not null,
                               group_id integer not null default nextval('group_id') primary key,
@@ -34,7 +39,8 @@ create table study_groups (
                               expelled_students bigint not null,
                               form_of_education form_of_education,
                               semester semester not null,
-                              creator text not null
+                              creator varchar(20) not null,
+                              foreign key (creator) references client_accounts(username) on delete cascade
 );
 
 alter table study_groups
@@ -47,7 +53,6 @@ alter table study_groups
 
 
 create table group_coordinates (
-                                   coordinate_id serial primary key,
                                    group_id integer unique not null,
                                    coordinate_x integer not null,
                                    coordinate_y integer not null,
@@ -77,7 +82,6 @@ alter table group_admins
         check (weight is null or weight > 0);
 
 create table admin_locations (
-                                 location_id serial primary key,
                                  admin_id integer unique not null,
                                  x bigint not null,
                                  y integer not null,

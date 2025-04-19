@@ -43,7 +43,7 @@ public class Recipient implements Callable<Request> {
         } catch (IOException | ClassNotFoundException e) {
             RainbowPrinter.printError("There was an error while reading the channel!");
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Read Request failed!");
         }
     }
 

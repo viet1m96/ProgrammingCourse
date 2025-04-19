@@ -33,11 +33,10 @@ public class SignInMode implements AuthMode{
         Response response = transporter.transport(request);
         List<String> result = response.getResult();
         Account newAccount = null;
+        renderer.printNotice(response);
         if(result == null) {
-            renderer.printNotice(response);
             return null;
         } else {
-            renderer.printNotice(response);
             newAccount = new Account(username, password, result.get(0));
         }
         return newAccount;
@@ -55,7 +54,7 @@ public class SignInMode implements AuthMode{
                 }
             } catch (IOException e) {
                 LogUtil.logTrace(e);
-                throw new LogException();
+                throw new LogException("Reading Username failed");
             } catch (AccountInputException e) {
                 RainbowPrinter.printError(e.toString());
             }

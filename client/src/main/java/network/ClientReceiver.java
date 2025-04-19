@@ -40,7 +40,7 @@ public class ClientReceiver {
         }
         catch (IOException | ClassNotFoundException e) {
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Error while receiving response!");
         }
     }
 }

@@ -142,7 +142,7 @@ public class RecursionController {
                     cyclePath.put(trace, Integer.parseInt(count) - 1);
                 } catch (IOException e) {
                     LogUtil.logTrace(e);
-                    throw new LogException();
+                    throw new LogException("Reading time of recursion failed");
                 } catch (WrongInputException e) {
                     RainbowPrinter.printError(e.toString());
                     count = "";

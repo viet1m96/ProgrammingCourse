@@ -93,7 +93,7 @@ public class InputChecker {
                         throw new WrongInputException();
                     } catch (WrongInputException e) {
                         input = "";
-                        RainbowPrinter.printError(e.toString());
+                        RainbowPrinter.printError(e.getMessage());
                     }
                 }
             }

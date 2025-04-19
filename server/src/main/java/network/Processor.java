@@ -3,7 +3,10 @@ package network;
 
 import authorization_lib.JwtUtil;
 import database.CollectionManager;
+import database.ConnectionCreator;
+import database.DatabaseManager;
 import exceptions.database_exception.PostgresException;
+import exceptions.log_exceptions.EnvNotExistsException;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.TokenException;
 import exceptions.user_exceptions.UserException;
@@ -35,20 +38,25 @@ public class Processor implements Callable<Response> {
     private Invoker invoker;
     private Receiver receiver;
     private CommandManager commandManager;
+    private DatabaseManager databaseManager;
     private CollectionManager collectionManager;
+    private ConnectionCreator connectionCreator;
 
-    public void init() {
+    public void init() throws EnvNotExistsException {
         try {
             commandManager = new CommandManager();
             commandManager.init();
-            collectionManager = new CollectionManager();
-            receiver = new Receiver(collectionManager, commandManager);
+            connectionCreator = new ConnectionCreator();
+            connectionCreator.init();
+            databaseManager = new DatabaseManager(connectionCreator);
+            collectionManager = new CollectionManager(databaseManager);
+            receiver = new Receiver(collectionManager, commandManager, connectionCreator);
             invoker = new Invoker(commandManager, receiver);
             collectionManager.uploadData();
             RainbowPrinter.printInfo("The process of uploading data finished!");
             LogUtil.logInfo("The process of uploading data finished!");
         } catch (LogException e) {
-            RainbowPrinter.printError(e.toString());
+            RainbowPrinter.printError(e.getMessage());
         }
     }
 
@@ -74,6 +82,7 @@ public class Processor implements Callable<Response> {
             notice.add("The " + request.getCmd() + " command has been unsuccessfully executed.");
             result = new Response(notice, null, request.getRemoteAddress());
         } catch (LogException e) {
+            RainbowPrinter.printError(e.getMessage());
             RainbowPrinter.printError(e.toString());
             List<String> notice = new ArrayList<>();
             notice.add("There was a system error while executing the " + request.getCmd() + " command.");

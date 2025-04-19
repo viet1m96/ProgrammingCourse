@@ -11,7 +11,6 @@ import java.util.Objects;
 public class Coordinates implements Serializable {
     @Serial
     private static final long serialVersionUID = 5L;
-    private Integer id;
     private Integer x;
     private Integer y;
 
@@ -45,13 +44,6 @@ public class Coordinates implements Serializable {
      */
     public Integer getY() {
         return y;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-    public Integer getId () {
-        return id;
     }
 
     /**

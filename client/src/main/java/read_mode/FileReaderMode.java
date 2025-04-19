@@ -79,7 +79,7 @@ public class FileReaderMode implements ReadMode {
             adminInfo.add(getInputFromUserForPerson(reader, TypeOfPer.NAME));
         } catch (IOException e) {
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Study Group Build failed");
         }
         return StudyGroupBuilder.parseStudyGroup(groupInfo, adminInfo);
     }
@@ -152,7 +152,7 @@ public class FileReaderMode implements ReadMode {
 
         } catch (IOException e) {
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Reading file failed");
         }
     }
 }

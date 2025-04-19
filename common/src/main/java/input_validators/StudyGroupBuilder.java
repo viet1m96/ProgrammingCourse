@@ -68,8 +68,8 @@ public class StudyGroupBuilder {
             studyGroup.setSemesterEnum(semester);
             studyGroup.setGroupAdmin(parsePerson(adminInfo));
         } catch (DateTimeParseException | IllegalArgumentException e) {
-            e.printStackTrace();//replace later
-            throw new LogException();
+            e.printStackTrace();
+            throw new LogException("StudyGroup build failed");
         }
         return studyGroup;
     }
@@ -106,7 +106,7 @@ public class StudyGroupBuilder {
 
         } catch (DateTimeParseException | IllegalArgumentException e) {
             e.printStackTrace();//replace later
-            throw new LogException();
+            throw new LogException("Person parsing failed");
         }
         return admin;
     }
@@ -139,8 +139,8 @@ public class StudyGroupBuilder {
                 }
             }
         } catch (NumberFormatException e) {
-            RainbowPrinter.printError(e.toString());
-            throw new LogException();
+            RainbowPrinter.printError(e.getMessage());
+            throw new LogException("Location parsing failed");
         }
         return location;
     }

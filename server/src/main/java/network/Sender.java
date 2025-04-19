@@ -39,7 +39,7 @@ public class Sender implements Callable<Response> {
         } catch (IOException e) {
             LogUtil.logTrace(e);
             RainbowPrinter.printError("There was a problem with sending process!");
-            throw new LogException();
+            throw new LogException("Send Response failed!");
         }
     }
 
@@ -50,7 +50,7 @@ public class Sender implements Callable<Response> {
             response = responseQueue.take();
             sendAResponse(response);
         } catch (LogException e) {
-            RainbowPrinter.printError(e.toString());
+            RainbowPrinter.printError(e.getMessage());
         } catch (InterruptedException e) {
             LogUtil.logTrace(e);
             RainbowPrinter.printError("There was a problem with sending process, please look at the log file for more details.");

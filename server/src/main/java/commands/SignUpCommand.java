@@ -1,6 +1,7 @@
 package commands;
 
 import exceptions.log_exceptions.LogException;
+import exceptions.user_exceptions.NameTakenException;
 import goods.Request;
 import goods.Response;
 import handler.Receiver;
@@ -18,7 +19,7 @@ public class SignUpCommand extends Command {
     }
 
     @Override
-    public Response execute(Request request) throws LogException {
+    public Response execute(Request request) throws LogException, NameTakenException {
         return receiver.sign_up(request);
     }
 }

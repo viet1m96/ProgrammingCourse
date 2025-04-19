@@ -9,7 +9,9 @@ public class LogException extends Exception {
     /**
      * Constructs a new {@code LogException} with a default error message.
      */
-    public LogException() {
+    private String message;
+    public LogException(String message) {
+        this.message = message;
     }
 
     /**
@@ -19,6 +21,11 @@ public class LogException extends Exception {
      */
     @Override
     public String toString() {
-        return "There is an error with system during processing, please look at the log file for more details.";
+        return message;
+    }
+
+    @Override
+    public String getMessage() {
+        return "There is an error with system during processing, please look at logs for more details";
     }
 }

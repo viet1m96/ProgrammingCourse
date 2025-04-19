@@ -3,9 +3,11 @@ package handler;
 import authorization_lib.JwtUtil;
 import database.ClientAccountWorker;
 import database.CollectionManager;
+import database.ConnectionCreator;
 import exceptions.database_exception.*;
 import exceptions.log_exceptions.EnvNotExistsException;
 import exceptions.log_exceptions.LogException;
+import exceptions.user_exceptions.NameTakenException;
 import exceptions.user_exceptions.UserException;
 import goods.Request;
 import goods.Response;
@@ -18,9 +20,8 @@ public class Receiver {
     private final CommandManager commandManager;
     private final ClientAccountWorker clientAccountWorker;
 
-    public Receiver(CollectionManager collectionManager, CommandManager commandManager) throws EnvNotExistsException {
-        clientAccountWorker = new ClientAccountWorker();
-        clientAccountWorker.init();
+    public Receiver(CollectionManager collectionManager, CommandManager commandManager, ConnectionCreator connectionCreator) throws EnvNotExistsException {
+        clientAccountWorker = new ClientAccountWorker(connectionCreator);
         this.collectionManager = collectionManager;
         this.commandManager = commandManager;
     }
@@ -48,25 +49,18 @@ public class Receiver {
         }
     }
 
-    public Response sign_up(Request request) throws LogException {
+    public Response sign_up(Request request) throws LogException, NameTakenException {
         List<String> arguments = request.getArguments();
-        boolean userExist = clientAccountWorker.checkUsername(arguments.get(0));
-        if(userExist) {
+        boolean insertSuccess = clientAccountWorker.insertNewAccount(arguments.get(0), arguments.get(1));
+        if(insertSuccess) {
+            List<String> result = new ArrayList<>();
+            String token = JwtUtil.generateToken(arguments.get(0));
+            result.add(token);
+            return new Response(new ArrayList<>(), result, request.getRemoteAddress());
+        } else {
             List<String> notice = new ArrayList<>();
             notice.add("Your username already exists.");
             return new Response(notice, null, request.getRemoteAddress());
-        } else {
-            boolean insertSuccess = clientAccountWorker.insertNewAccount(arguments.get(0), arguments.get(1));
-            if(insertSuccess) {
-                List<String> result = new ArrayList<>();
-                String token = JwtUtil.generateToken(arguments.get(0));
-                result.add(token);
-                return new Response(new ArrayList<>(), result, request.getRemoteAddress());
-            } else {
-                List<String> notice = new ArrayList<>();
-                notice.add("Your username already exists.");
-                return new Response(notice, null, request.getRemoteAddress());
-            }
         }
     }
 
@@ -94,7 +88,7 @@ public class Receiver {
         return collectionManager.remove_key(request);
     }
 
-    public Response replace_if_lower(Request request) throws UserException, FailedConditionUpdateException, UnsuccesfulUpdateException, LogException, NotCreatorException {
+    public Response replace_if_lower(Request request) throws UserException, LogException, NotCreatorException, UnsuccesfulInsertException, UnsuccesfulDeletionException {
         return collectionManager.replace_if_lower(request);
     }
 

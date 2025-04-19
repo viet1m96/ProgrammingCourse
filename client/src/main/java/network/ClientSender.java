@@ -28,7 +28,7 @@ public class ClientSender {
             LogUtil.logInfo("The " + request.getCmd() + " command is being sent from " + "port " + channel.getLocalAddress());
         } catch (IOException e) {
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Error while sending from client");
         }
     }
 }

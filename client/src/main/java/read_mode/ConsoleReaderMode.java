@@ -60,7 +60,7 @@ public class ConsoleReaderMode implements ReadMode {
             }
         } catch (IOException e) {
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Console Read Mode failed!");
         }
         return StudyGroupBuilder.parseStudyGroup(groupInfo, adminInfo);
     }

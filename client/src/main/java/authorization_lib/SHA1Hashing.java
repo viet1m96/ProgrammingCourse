@@ -22,7 +22,7 @@ public class SHA1Hashing {
           return hexString.toString();
         } catch(NoSuchAlgorithmException e) {
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Hashing failed");
         }
     }
 }

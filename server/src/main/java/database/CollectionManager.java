@@ -5,9 +5,11 @@ import exceptions.database_exception.*;
 import exceptions.log_exceptions.EnvNotExistsException;
 import exceptions.log_exceptions.LogException;
 import exceptions.user_exceptions.KeyTakenException;
+import exceptions.user_exceptions.NameTakenException;
 import exceptions.user_exceptions.WrongKeyException;
 import goods.Request;
 import goods.Response;
+import logging.LogUtil;
 import main_objects.StudyGroup;
 import printer_options.RainbowPrinter;
 
@@ -15,25 +17,12 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class CollectionManager {
-    private final StudyGroupUploader studyGroupUploader;
-    private final StudyGroupPusher studyGroupPusher;
-    private final StudyGroupRemover studyGroupRemover;
-    private final StudyGroupUpdater studyGroupUpdater;
-    private final StudyGroupBasicUtil studyGroupBasicUtil;
+    private final DatabaseManager databaseManager;
     private final LinkedHashMap<String, StudyGroup> collection = new LinkedHashMap<>();
     private final String startTime = LocalDateTime.now().toString();
 
-    public CollectionManager() throws LogException {
-        studyGroupUploader = new StudyGroupUploader();
-        studyGroupUploader.init();
-        studyGroupPusher = new StudyGroupPusher();
-        studyGroupPusher.init();
-        studyGroupRemover = new StudyGroupRemover();
-        studyGroupRemover.init();
-        studyGroupUpdater = new StudyGroupUpdater();
-        studyGroupUpdater.init();
-        studyGroupBasicUtil = new StudyGroupBasicUtil();
-        studyGroupBasicUtil.init();
+    public CollectionManager(DatabaseManager databaseManager) throws LogException {
+        this.databaseManager = databaseManager;
     }
 
     private Response checkEmpty(Request request) {
@@ -46,6 +35,16 @@ public class CollectionManager {
                 return null;
             }
         }
+    }
+
+    private boolean checkKey(Request request) {
+        String key = request.getArguments().get(0);
+        return collection.containsKey(key);
+    }
+
+    private boolean checkCreator(String creator, String searchKey) {
+        String creatorFromCollection = collection.get(searchKey).getCreator();
+        return creator.equals(creatorFromCollection);
     }
 
     public Response info(Request request) {
@@ -62,13 +61,15 @@ public class CollectionManager {
     }
 
 
-    public Response insert(Request request) throws KeyTakenException, LogException, UnsuccesfulInsertException {
+    public Response insert(Request request) throws KeyTakenException, NameTakenException, LogException, UnsuccesfulInsertException {
         String search_key = request.getArguments().get(0);
         StudyGroup studyGroup = request.getStudyGroup();
+
+        boolean checkKey = checkKey(request);
+        if(checkKey) throw new KeyTakenException();
         studyGroup.setSearchKey(search_key);
         studyGroup.setCreator(JwtUtil.getUsername(request.getToken()));
-        studyGroupBasicUtil.checkUsedSearchKey(search_key);
-        studyGroupPusher.insertStudyGroup(studyGroup);
+        databaseManager.insertStudyGroup(studyGroup);
         synchronized (collection) {
             collection.put(search_key, request.getStudyGroup());
         }
@@ -95,7 +96,7 @@ public class CollectionManager {
         Response response = checkEmpty(request);
         if(response == null) {
             String creator = JwtUtil.getUsername(request.getToken());
-            studyGroupRemover.clearByCreator(creator);
+            databaseManager.clearByCreator(creator);
             synchronized (collection) {
                 collection.entrySet().removeIf(entry -> entry.getValue().getCreator().equals(creator));
             }
@@ -108,10 +109,10 @@ public class CollectionManager {
         Response response = checkEmpty(request);
         if(response == null) {
             String searchKey = request.getArguments().get(0);
-            String creator = JwtUtil.getUsername(request.getToken());
-            studyGroupBasicUtil.checkKeyExists(searchKey);
-            studyGroupBasicUtil.checkCreator(searchKey, creator);
-            studyGroupRemover.removeKey(searchKey);
+            if(!checkKey(request)) throw new WrongKeyException();
+            String creatorFromReq = JwtUtil.getUsername(request.getToken());
+            if(!checkCreator(creatorFromReq, searchKey)) throw new NotCreatorException();
+            databaseManager.removeByKey(searchKey);
             synchronized (collection) {
                 collection.remove(searchKey);
             }
@@ -127,7 +128,7 @@ public class CollectionManager {
         if(response == null) {
             Long criteria = request.getStudyGroup().getStudentsCount();
             String creator = JwtUtil.getUsername(request.getToken());
-            long numOfRemoved = studyGroupRemover.removeIfGreater(creator, criteria);
+            long numOfRemoved = databaseManager.removeIfGreater(creator, criteria);
             synchronized (collection) {
                 collection.entrySet().removeIf(entry -> entry.getValue().getCreator().equals(creator) && entry.getValue().getStudentsCount() > criteria);
             }
@@ -142,13 +143,23 @@ public class CollectionManager {
         Response response = checkEmpty(request);
         if(response == null) {
             String searchKey = request.getArguments().get(0);
-            String creator = JwtUtil.getUsername(request.getToken());
             StudyGroup studyGroup = request.getStudyGroup();
+            String creatorFromReq = JwtUtil.getUsername(request.getToken());
+            if(!checkKey(request)) throw new WrongKeyException();
             studyGroup.setSearchKey(searchKey);
+            if(!checkCreator(creatorFromReq, searchKey)) throw new NotCreatorException();
+            String creator = JwtUtil.getUsername(request.getToken());
+            studyGroup.setCreator(creator);
+            Integer id;
+            Integer adminId;
+            synchronized (collection) {
+                id = collection.get(searchKey).getId();
+                adminId = collection.get(searchKey).getGroupAdmin().getId();
+            }
+            studyGroup.setId(id);
+            studyGroup.getGroupAdmin().setId(adminId);
             List<String> notice = new ArrayList<>();
-            studyGroupBasicUtil.checkKeyExists(searchKey);
-            studyGroupBasicUtil.checkCreator(searchKey, creator);
-            studyGroupUpdater.simpleUpdate(studyGroup);
+            databaseManager.updateStudyGroup(studyGroup);
             synchronized (collection) {
                 collection.remove(searchKey);
                 collection.put(searchKey, studyGroup);
@@ -159,23 +170,31 @@ public class CollectionManager {
         return response;
     }
 
-    public Response replace_if_lower(Request request) throws WrongKeyException,NotCreatorException, FailedConditionUpdateException, UnsuccesfulUpdateException, LogException {
+    public Response replace_if_lower(Request request) throws WrongKeyException, NotCreatorException, LogException, UnsuccesfulInsertException, UnsuccesfulDeletionException {
         Response response = checkEmpty(request);
         if(response == null) {
             String searchKey = request.getArguments().get(0);
-            String creator = JwtUtil.getUsername(request.getToken());
+            if(!checkKey(request)) throw new WrongKeyException();
             StudyGroup studyGroup = request.getStudyGroup();
             studyGroup.setSearchKey(searchKey);
+            String creatorFromReq = JwtUtil.getUsername(request.getToken());
+            if(!checkCreator(creatorFromReq, searchKey)) throw new NotCreatorException();
+            studyGroup.setCreator(creatorFromReq);
             List<String> notice = new ArrayList<>();
-            studyGroupBasicUtil.checkKeyExists(searchKey);
-            studyGroupBasicUtil.checkCreator(searchKey, creator);
-            studyGroupUpdater.replaceIfLower(request.getStudyGroup());
+            boolean replace = false;
             synchronized (collection) {
-                if(collection.get(searchKey).compareTo(studyGroup) < 0 && collection.get(searchKey).getCreator().equals(creator)) {
-                    collection.replace(searchKey, studyGroup);
-                    notice.add("The element with key " + searchKey + " was replaced");
-                } else {
-                    notice.add("The element with key " + searchKey + " was not replaced");
+                Long studentsCount = collection.get(searchKey).getStudentsCount();
+                if(studentsCount < studyGroup.getStudentsCount()) replace = true;
+            }
+            if(replace) {
+                databaseManager.replaceIfLower(studyGroup);
+                synchronized (collection) {
+                    if(collection.get(searchKey).compareTo(studyGroup) < 0 && collection.get(searchKey).getCreator().equals(creatorFromReq)) {
+                        collection.replace(searchKey, studyGroup);
+                        notice.add("The element with key " + searchKey + " was replaced");
+                    } else {
+                        notice.add("The element with key " + searchKey + " was not replaced");
+                    }
                 }
             }
             return new Response(notice, null, request.getRemoteAddress());
@@ -233,11 +252,16 @@ public class CollectionManager {
 
 
     public void uploadData() throws LogException {
-        List<StudyGroup> result = studyGroupUploader.loadStudyGroups();
-        for (StudyGroup studyGroup : result) {
-            collection.put(studyGroup.getSearchKey(), studyGroup);
-        }
-        RainbowPrinter.printInfo("Loaded " + collection.size() + " study groups");
+       try {
+           List<StudyGroup> result = databaseManager.uploadData();
+           for (StudyGroup studyGroup : result) {
+               collection.put(studyGroup.getSearchKey(), studyGroup);
+           }
+           RainbowPrinter.printInfo("Loaded " + collection.size() + " study groups");
+       } catch (Exception e) {
+           LogUtil.logTrace(e);
+           throw new LogException("Data upload failed");
+       }
     }
 
 }

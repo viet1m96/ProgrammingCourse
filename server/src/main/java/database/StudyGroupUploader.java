@@ -1,6 +1,5 @@
 package database;
 
-import config.AppConfig;
 import enums.Color;
 import enums.FormOfEducation;
 import enums.Semester;
@@ -18,37 +17,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudyGroupUploader {
-    private Connection connection;
-
-    public StudyGroupUploader() {
-    }
-
-    public void init() throws LogException {
-        try {
-            String url = AppConfig.getDatabase_url();
-            String username = AppConfig.getDatabase_user();
-            String password = AppConfig.getDatabase_pass();
-            connection = DriverManager.getConnection(url, username, password);
-        } catch (SQLException e) {
-            LogUtil.logTrace(e);
-            throw new LogException();
-        }
-    }
-
-    public List<StudyGroup> loadStudyGroups() throws LogException {
-        String sql = """
-                select study_groups.*, group_coordinates.*, group_admins.*, admin_locations.* from study_groups
+    private String uploadQuery = """
+                select study_groups.*, group_coordinates.*, group_admins.*, admin_locations.*, group_coordinates.group_id as coordinate_id, admin_locations.admin_id as location_id from study_groups
                          left join group_coordinates on study_groups.group_id = group_coordinates.group_id
                          left join group_admins on study_groups.group_id = group_admins.group_id
                          left join admin_locations on group_admins.admin_id = admin_locations.admin_id""";
+    public StudyGroupUploader() {}
+
+
+    public List<StudyGroup> loadStudyGroups(Connection connection) throws LogException {
         List<StudyGroup> result = new ArrayList<>();
-        try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(uploadQuery)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 int line = 1;
                 while (resultSet.next()) {
-                    Object coordinateID = resultSet.getObject("coordinate_id");
                     Object adminID = resultSet.getObject("admin_id");
-                    if(coordinateID == null || adminID == null) {
+                    Object groupId = resultSet.getObject("coordinate_id");
+                    if(adminID == null || groupId == null) {
                         RainbowPrinter.printInfo("Can not load the object on the " + line + " line");
                         line++;
                         continue;
@@ -70,7 +55,6 @@ public class StudyGroupUploader {
                     studyGroup.setCreator(resultSet.getString("creator"));
 
                     Coordinates coordinates = new Coordinates();
-                    coordinates.setId(resultSet.getInt("coordinate_id"));
                     coordinates.setX(resultSet.getInt("coordinate_x"));
                     coordinates.setY(resultSet.getInt("coordinate_y"));
                     studyGroup.setCoordinates(coordinates);
@@ -82,7 +66,7 @@ public class StudyGroupUploader {
                     if(birthDay == null) {
                         admin.setBirthDay(null);
                     } else {
-                        admin.setBirthDay((LocalDate) birthDay);
+                        admin.setBirthDay(LocalDate.parse(birthDay.toString()));
                     }
                     Object weight = resultSet.getObject("weight");
                     if(weight == null) {
@@ -114,7 +98,7 @@ public class StudyGroupUploader {
             }
         } catch (Exception e) {
             LogUtil.logTrace(e);
-            throw new LogException();
+            throw new LogException("Loading study groups failed");
         } finally {
             try {
                 if(connection != null) {

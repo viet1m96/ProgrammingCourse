@@ -1,5 +1,6 @@
 package network;
 
+import exceptions.log_exceptions.EnvNotExistsException;
 import exceptions.log_exceptions.LogException;
 import exceptions.network_exception.NetworkException;
 import goods.Request;
@@ -31,7 +32,7 @@ public class Transporter {
 
     public Transporter() {
     }
-    public void init() throws NetworkException {
+    public void init() throws NetworkException, EnvNotExistsException {
         LogUtil.logInfo("The server was started!");
         try {
             reRegisterKeys = new LinkedBlockingQueue<>();
@@ -73,21 +74,28 @@ public class Transporter {
 
                     if (key.isValid() && key.isReadable()) {
                         key.interestOps(0);
-                        readerRequest.submit(() -> {
-                            try {
-                                recipient.call();
-                                handlerRequest.submit(processor);
-                                writerResponse.submit(sender);
-                            } finally {
-                                reRegisterKeys.add(key);
-                                selector.wakeup();
-                            }
-                        });
+//                        readerRequest.submit(() -> {
+//                            try {
+//                                recipient.call();
+//                                handlerRequest.submit(processor);
+//                                writerResponse.submit(sender);
+//                            } finally {
+//                                reRegisterKeys.add(key);
+//                                selector.wakeup();
+//                            }
+//                        });
+                        CompletableFuture.runAsync(() -> recipient.call(), readerRequest)
+                                .thenRunAsync(() -> handlerRequest.submit(processor), handlerRequest)
+                                .thenRunAsync(() -> handlerRequest.submit(sender), writerResponse)
+                                .thenRun(() -> {
+                                    reRegisterKeys.add(key);
+                                    selector.wakeup();
+                                });
                     }
                 }
             } catch (IOException e) {
                 LogUtil.logTrace(e);
-                throw new LogException();
+                throw new LogException("Selector select failed");
             }
         }
     }

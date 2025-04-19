@@ -18,7 +18,7 @@ public class ClientTransporter {
     private ClientSender clientSender;
     private ClientReceiver clientReceiver;
     private final int PORT = 4999;
-    private final int TIMEOUT = 10000;
+    private final int TIMEOUT = 1000;
     private final int MAX_PACKET_SIZE = 65507;
     private SocketAddress serverAddress;
 
