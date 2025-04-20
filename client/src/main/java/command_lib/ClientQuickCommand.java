@@ -6,7 +6,8 @@ import network.CommandHistory;
 import printer_options.RainbowPrinter;
 
 public class ClientQuickCommand {
-    public ClientQuickCommand() {}
+    public ClientQuickCommand() {
+    }
 
     public void signOut(Account account) {
         account.setToken(null);

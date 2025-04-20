@@ -6,9 +6,9 @@ public class Account {
     private String token;
 
     public Account() {}
-    public Account(String username, String passowrd, String token) {
+    public Account(String username, String password, String token) {
         this.username = username;
-        this.password = passowrd;
+        this.password = password;
         this.token = token;
     }
 

@@ -118,15 +118,15 @@ public class FileReaderMode implements ReadMode {
                 switch (needInput) {
                     case NO_NEED_INPUT -> {
                         Response response = clientTransporter.transport(new Request(nameNewCommand, arguments, account.getToken()));
-                        renderer.printNotice(response);
                         renderer.printResult(response);
+                        renderer.printNotice(response);
                     }
                     case NEED_INPUT -> {
                         if (!nameNewCommand.equals("execute_script")) {
                             StudyGroup studyGroup = build(br);
                             Response response = clientTransporter.transport(new Request(nameNewCommand, arguments, studyGroup, account.getToken()));
-                            renderer.printNotice(response);
                             renderer.printResult(response);
+                            renderer.printNotice(response);
                         } else {
                             if (recursionController.isRecursion(currentTrace, currentFile, argument)) {
                                 if (recursionController.isFirstTimeDetected(currentTrace, currentFile, argument)) {

@@ -18,16 +18,18 @@ public class StudyGroupRemover {
     public void removeByKey(String searchKey, Connection connection) throws Exception, LogException, UnsuccesfulDeletionException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(removeByKey)) {
             preparedStatement.setString(1, searchKey);
-            if(preparedStatement.executeUpdate() <= 0) throw new UnsuccesfulDeletionException();
+            if(preparedStatement.executeUpdate() < 0) throw new UnsuccesfulDeletionException();
 
         }
     }
 
-    public void clearByCreator(String creator, Connection connection) throws Exception, LogException, UnsuccesfulDeletionException {
+    public Integer clearByCreator(String creator, Connection connection) throws Exception, LogException, UnsuccesfulDeletionException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(clearByCreator)) {
+            int rowAffected;
             preparedStatement.setString(1, creator);
-            if(preparedStatement.executeUpdate() <= 0) throw new UnsuccesfulDeletionException();
-
+            rowAffected = preparedStatement.executeUpdate();
+            if(rowAffected < 0) throw new UnsuccesfulDeletionException();
+            return rowAffected;
         }
     }
 

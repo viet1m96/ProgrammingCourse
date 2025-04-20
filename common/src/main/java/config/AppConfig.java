@@ -17,7 +17,6 @@ public class AppConfig {
         }
         return secret;
     }
-
     public static String getDatabase_user() throws EnvNotExistsException {
         String username = dotenv.get("DATABASE_USERNAME");
         if (username == null) {

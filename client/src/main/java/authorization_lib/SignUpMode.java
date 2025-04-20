@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SignUpMode implements AuthMode {
-    public SignUpMode() {}
+    public SignUpMode() {
+    }
 
     @Override
     public Account executeAcc(ClientTransporter transporter, Renderer renderer) throws LogException, NetworkException {
@@ -34,7 +35,7 @@ public class SignUpMode implements AuthMode {
         List<String> result = response.getResult();
         renderer.printNotice(response);
         Account newAccount = null;
-        if(result == null) {
+        if (result == null) {
             return null;
         } else {
             newAccount = new Account(username, password, result.get(0));
@@ -45,7 +46,7 @@ public class SignUpMode implements AuthMode {
 
     public String getInputUsername() throws LogException {
         String username = "";
-        while(username.isEmpty()) {
+        while (username.isEmpty()) {
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 RainbowPrinter.printCondition("Please enter your desired username (the username must not be empty and shorter than 20 characters): ");
@@ -57,6 +58,7 @@ public class SignUpMode implements AuthMode {
                 LogUtil.logTrace(e);
                 throw new LogException("Reading username failed");
             } catch (AccountInputException e) {
+                username = "";
                 RainbowPrinter.printError(e.toString());
             }
         }
@@ -65,7 +67,7 @@ public class SignUpMode implements AuthMode {
 
     public String getInputPassword() {
         String password = "";
-        while(password.isEmpty()) {
+        while (password.isEmpty()) {
             try {
                 RainbowPrinter.printCondition("Your password have to follow these following conditions:");
                 RainbowPrinter.printInfo("* Must not be longer than 8 characters and shorter than 20 characters");
@@ -75,7 +77,7 @@ public class SignUpMode implements AuthMode {
                 Console console = System.console();
                 char[] pwdArray = console.readPassword("Please enter your desired password: ");
                 password = new String(pwdArray);
-                if(!InputAccountChecker.checkPassword(password)) {
+                if (!InputAccountChecker.checkPassword(password)) {
                     password = "";
                     throw new AccountInputException();
                 }

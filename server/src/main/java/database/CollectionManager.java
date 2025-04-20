@@ -96,11 +96,13 @@ public class CollectionManager {
         Response response = checkEmpty(request);
         if(response == null) {
             String creator = JwtUtil.getUsername(request.getToken());
-            databaseManager.clearByCreator(creator);
+            Integer rowDeleted = databaseManager.clearByCreator(creator);
             synchronized (collection) {
                 collection.entrySet().removeIf(entry -> entry.getValue().getCreator().equals(creator));
             }
-            return new Response(new ArrayList<>(), null, request.getRemoteAddress());
+            List<String> notice = new ArrayList<>();
+            notice.add(rowDeleted + "elements were deleted");
+            return new Response(notice, null, request.getRemoteAddress());
         }
         return response;
     }

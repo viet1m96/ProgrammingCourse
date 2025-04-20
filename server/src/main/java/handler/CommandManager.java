@@ -29,6 +29,9 @@ public class CommandManager {
         registerCommand("replace_if_lower", new Replace_if_lowerCommand());
         registerCommand("sign_in", new SignInCommand());
         registerCommand("sign_up", new SignUpCommand());
+        registerCommand("sign_out", new SignOutCommand());
+        registerCommand("history", new HistoryCommand());
+
     }
 
     public void registerCommand(String name, Command command) {

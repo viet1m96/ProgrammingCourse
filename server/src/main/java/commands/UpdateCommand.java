@@ -20,7 +20,7 @@ public class UpdateCommand extends Command {
      * and a description.
      */
     public UpdateCommand() {
-        super("update id {element}", "", "update the value of the collection element whose id is equal to the specified one");
+        super("update key {element}", "", "update the value of the collection element whose id is equal to the specified one");
     }
 
     private Receiver receiver;

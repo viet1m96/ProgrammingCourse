@@ -33,6 +33,7 @@ public class CommandClassifier {
     public NeedInput getCommandClassifier(String command) {
         return commandClassifiers.get(command);
     }
+
     public boolean isCommand(String command) {
         return commandClassifiers.containsKey(command);
     }

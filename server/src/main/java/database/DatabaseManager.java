@@ -10,7 +10,6 @@ import logging.LogUtil;
 import main_objects.StudyGroup;
 
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
 public class DatabaseManager {
@@ -70,14 +69,15 @@ public class DatabaseManager {
         }
     }
 
-    public void clearByCreator(String creator) throws LogException, UnsuccesfulDeletionException {
+    public Integer clearByCreator(String creator) throws LogException, UnsuccesfulDeletionException {
         Connection connection = null;
         try {
             connection = connectionCreator.getConnection();
             connection.setAutoCommit(false);
 
-            studyGroupRemover.clearByCreator(creator, connection);
+            int rowAffected = studyGroupRemover.clearByCreator(creator, connection);
             connection.commit();
+            return rowAffected;
         } catch (UnsuccesfulDeletionException e) {
             connectionCreator.rollbackProcess(connection);
             throw e;

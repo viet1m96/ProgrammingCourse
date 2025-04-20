@@ -32,6 +32,7 @@ public class Transporter {
 
     public Transporter() {
     }
+
     public void init() throws NetworkException, EnvNotExistsException {
         LogUtil.logInfo("The server was started!");
         try {
@@ -53,6 +54,7 @@ public class Transporter {
             throw new NetworkException();
         }
     }
+
     public void handleConnection() throws LogException {
         RainbowPrinter.printInfo("The server is listening on port " + PORT);
         LogUtil.logInfo("The server is listening on port " + PORT);
@@ -74,23 +76,13 @@ public class Transporter {
 
                     if (key.isValid() && key.isReadable()) {
                         key.interestOps(0);
-//                        readerRequest.submit(() -> {
-//                            try {
-//                                recipient.call();
-//                                handlerRequest.submit(processor);
-//                                writerResponse.submit(sender);
-//                            } finally {
-//                                reRegisterKeys.add(key);
-//                                selector.wakeup();
-//                            }
-//                        });
                         CompletableFuture.runAsync(() -> recipient.call(), readerRequest)
-                                .thenRunAsync(() -> handlerRequest.submit(processor), handlerRequest)
-                                .thenRunAsync(() -> handlerRequest.submit(sender), writerResponse)
-                                .thenRun(() -> {
+                                .thenRunAsync(() -> {
                                     reRegisterKeys.add(key);
                                     selector.wakeup();
                                 });
+                        CompletableFuture.runAsync(() -> handlerRequest.submit(processor), handlerRequest);
+                        CompletableFuture.runAsync(() -> writerResponse.submit(sender), writerResponse);
                     }
                 }
             } catch (IOException e) {

@@ -1,5 +1,6 @@
 package network;
 
+import authorization_lib.JwtUtil;
 import exceptions.log_exceptions.LogException;
 import goods.Request;
 import logging.LogUtil;
@@ -31,13 +32,16 @@ public class Recipient implements Callable<Request> {
             synchronized (channel) {
                 remoteAddress = channel.receive(buffer);
             }
-            RainbowPrinter.printCondition("Received connection from: " + remoteAddress);
             buffer.flip();
             ByteArrayInputStream bais = new ByteArrayInputStream(buffer.array(), 0, buffer.limit());
             ObjectInputStream ois = new ObjectInputStream(bais);
             Request request = (Request) ois.readObject();
             buffer.clear();
-
+            if(request.getToken() != null) {
+                RainbowPrinter.printCondition("Received connection from user: " + JwtUtil.getUsername(request.getToken()) + " at " + remoteAddress);
+            } else {
+                RainbowPrinter.printCondition("Received connection from " + remoteAddress);
+            }
             request.setRemoteAddress(remoteAddress);
             return request;
         } catch (IOException | ClassNotFoundException e) {

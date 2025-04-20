@@ -9,7 +9,7 @@ import java.util.List;
 public class Renderer {
     public Renderer() {
         RainbowPrinter.printInfo("Hello! Welcome to my Application!");
-        RainbowPrinter.printInfo("Please type 'help' to read the instructions or type 'exit' to exit.");
+        RainbowPrinter.printInfo("Please type 'sign_in' to sign in or 'sign_up' if you dont have an account or exit if you want to exit.");
     }
     public void printNotice(Response response) {
         if(response != null) {

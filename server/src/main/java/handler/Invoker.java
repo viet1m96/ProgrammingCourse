@@ -1,5 +1,6 @@
 package handler;
 
+import authorization_lib.JwtUtil;
 import commands.Command;
 import exceptions.database_exception.PostgresException;
 import exceptions.log_exceptions.LogException;
@@ -21,8 +22,13 @@ public class Invoker {
     }
 
     public Response call(Request request) throws UserException, LogException, PostgresException {
-        RainbowPrinter.printCondition(">" + "The " + request.getCmd() + " command is requested by " + request.getRemoteAddress());
-        LogUtil.logInfo("The " + request.getCmd() + " command is requested by " + request.getRemoteAddress());
+        if(request.getToken() == null) {
+            RainbowPrinter.printCondition(">" + "The " + request.getCmd() + " command is requested by " + request.getRemoteAddress());
+            LogUtil.logInfo("The " + request.getCmd() + " command is requested by user: " + request.getRemoteAddress());
+        } else {
+            RainbowPrinter.printCondition(">" + "The " + request.getCmd() + " command is requested by user: "+ JwtUtil.getUsername(request.getToken()) + " at " + request.getRemoteAddress());
+            LogUtil.logInfo("The " + request.getCmd() + " command is requested by user: " + JwtUtil.getUsername(request.getToken()) + " at " + request.getRemoteAddress());
+        }
         Command command = commandManager.getCommand(request.getCmd());
         command.setReceiver(receiver);
         return command.execute(request);

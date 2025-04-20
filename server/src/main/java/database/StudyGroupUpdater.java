@@ -60,7 +60,6 @@ public class StudyGroupUpdater {
 
 
     private void updateGroupAdmin(StudyGroup studyGroup, Connection connection) throws LogException, UnsuccesfulUpdateException {
-        // thang admin cung phai duoc cap nhat id tu ben ngoai roi moi vao den day
         try (PreparedStatement preparedStatement = connection.prepareStatement(updateGroupAdmin)) {
             Person admin = studyGroup.getGroupAdmin();
             preparedStatement.setString(1, admin.getName());
