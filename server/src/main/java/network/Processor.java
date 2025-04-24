@@ -18,7 +18,7 @@ import handler.Receiver;
 import logging.LogUtil;
 import printer_options.RainbowPrinter;
 
-import java.net.SocketAddress;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -29,7 +29,7 @@ public class Processor implements Callable<Response> {
     private final BlockingQueue<Request> requestQueue;
     private final BlockingQueue<Response> responseQueue;
 
-    public Processor(BlockingQueue<Request> requestQueue, BlockingQueue<Response> responseQueue){
+    public Processor(BlockingQueue<Request> requestQueue, BlockingQueue<Response> responseQueue) {
         this.requestQueue = requestQueue;
         this.responseQueue = responseQueue;
         RainbowPrinter.printInfo("Hello! Welcome to the Application!");
@@ -64,7 +64,7 @@ public class Processor implements Callable<Response> {
         try {
             JwtUtil.checkToken(request.getToken());
         } catch (TokenException e) {
-            if(!request.getCmd().equals("sign_up") && !request.getCmd().equals("sign_in")) {
+            if (!request.getCmd().equals("sign_up") && !request.getCmd().equals("sign_in")) {
                 throw new TokenException();
             }
         }
@@ -76,7 +76,7 @@ public class Processor implements Callable<Response> {
             checkAuthorization(request);
             result = invoker.call(request);
             result.addNotice("The " + request.getCmd() + " command has been successfully executed.");
-        } catch(UserException | PostgresException e) {
+        } catch (UserException | PostgresException e) {
             List<String> notice = new ArrayList<>();
             notice.add(e.toString());
             notice.add("The " + request.getCmd() + " command has been unsuccessfully executed.");
@@ -93,12 +93,12 @@ public class Processor implements Callable<Response> {
     }
 
 
-
     @Override
     public Response call() {
         Response result = null;
         try {
             Request request = requestQueue.take();
+            Thread.sleep(100000);
             result = processCommandFromUser(request);
             responseQueue.put(result);
         } catch (InterruptedException e) {

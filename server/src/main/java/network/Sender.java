@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
 
@@ -18,6 +17,7 @@ public class Sender implements Callable<Response> {
 
     private final BlockingQueue<Response> responseQueue;
     private final DatagramChannel channel;
+
     public Sender(DatagramChannel channel, BlockingQueue<Response> responseQueue) {
         this.responseQueue = responseQueue;
         this.channel = channel;

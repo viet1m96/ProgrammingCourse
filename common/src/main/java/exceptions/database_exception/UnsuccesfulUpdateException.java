@@ -1,7 +1,8 @@
 package exceptions.database_exception;
 
 public class UnsuccesfulUpdateException extends PostgresException {
-    public UnsuccesfulUpdateException() {}
+    public UnsuccesfulUpdateException() {
+    }
 
     @Override
     public String toString() {

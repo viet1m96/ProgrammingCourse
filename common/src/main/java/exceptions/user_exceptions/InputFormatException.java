@@ -9,7 +9,8 @@ public class InputFormatException extends UserException {
     /**
      * Constructs a new {@code InputFormatException} with a default error message.
      */
-    public InputFormatException() {}
+    public InputFormatException() {
+    }
 
     /**
      * Returns a string representation of the {@code InputFormatException}, providing a user-friendly error message.

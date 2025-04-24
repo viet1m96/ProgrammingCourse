@@ -77,12 +77,12 @@ public class Transporter {
                     if (key.isValid() && key.isReadable()) {
                         key.interestOps(0);
                         CompletableFuture.runAsync(() -> recipient.call(), readerRequest)
-                                .thenRunAsync(() -> {
+                                .thenRunAsync(() -> handlerRequest.submit(processor), handlerRequest)
+                                .thenRunAsync(() -> writerResponse.submit(sender), writerResponse)
+                                .thenRun(() -> {
                                     reRegisterKeys.add(key);
                                     selector.wakeup();
                                 });
-                        CompletableFuture.runAsync(() -> handlerRequest.submit(processor), handlerRequest);
-                        CompletableFuture.runAsync(() -> writerResponse.submit(sender), writerResponse);
                     }
                 }
             } catch (IOException e) {

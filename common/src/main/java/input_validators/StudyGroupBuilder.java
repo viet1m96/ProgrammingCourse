@@ -27,10 +27,10 @@ public class StudyGroupBuilder {
     /**
      * Parses a list of strings representing StudyGroup and Person (admin) data and constructs a {@link StudyGroup} object.
      *
-     * @param groupInfo  A list of strings containing the StudyGroup information. The order of elements is assumed to be:
-     *                   [id, name, coordinateX, coordinateY, creationDate, studentsCount, expelledStudentsCount, formOfEducation, semester].
-     * @param adminInfo  A list of strings containing the Person (admin) information. The order of elements is assumed to be:
-     *                   [name, birthday, weight, eyeColor, locationX, locationY, locationZ, locationName].
+     * @param groupInfo A list of strings containing the StudyGroup information. The order of elements is assumed to be:
+     *                  [id, name, coordinateX, coordinateY, creationDate, studentsCount, expelledStudentsCount, formOfEducation, semester].
+     * @param adminInfo A list of strings containing the Person (admin) information. The order of elements is assumed to be:
+     *                  [name, birthday, weight, eyeColor, locationX, locationY, locationZ, locationName].
      * @return A {@link StudyGroup} object constructed from the parsed data.
      * @throws UserException If there is an issue with the user-provided data (e.g., incorrect format).
      * @throws LogException  If there is an issue during logging or parsing.

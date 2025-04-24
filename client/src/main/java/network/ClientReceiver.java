@@ -15,7 +15,8 @@ import java.nio.ByteBuffer;
 import java.nio.channels.DatagramChannel;
 
 public class ClientReceiver {
-    public ClientReceiver() {}
+    public ClientReceiver() {
+    }
 
     public Response getAResponse(DatagramChannel channel, int MAX_PACKET_SIZE) throws NetworkException, LogException {
         try {
@@ -32,13 +33,11 @@ public class ClientReceiver {
             RainbowPrinter.printError("Server timed out (no response)!");
             LogUtil.logTrace(e);
             throw new NetworkException();
-        }
-        catch (PortUnreachableException e) {
+        } catch (PortUnreachableException e) {
             RainbowPrinter.printError("Can not connect to the server! Server's port may be unreachable!");
             LogUtil.logTrace(e);
             throw new NetworkException();
-        }
-        catch (IOException | ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             LogUtil.logTrace(e);
             throw new LogException("Error while receiving response!");
         }

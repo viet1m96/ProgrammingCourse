@@ -36,7 +36,9 @@ public class Controller {
     private ModeManager modeManager;
     private CommandHistory commandHistory;
     private ClientQuickCommand quickCommand;
-    public Controller() {}
+
+    public Controller() {
+    }
 
     public void init() {
         account = new Account();
@@ -74,7 +76,7 @@ public class Controller {
                         quickCommand.signOut(this.account);
                         break;
                     default:
-                        if(authorizationChecker.checkAuthorization(account, clientTransporter, renderer, str)) {
+                        if (authorizationChecker.checkAuthorization(account, clientTransporter, renderer, str)) {
                             processInput(str);
                         }
                         break;
@@ -92,10 +94,9 @@ public class Controller {
     }
 
     public void validateInput(String input) throws InputFormatException {
-        if(!InputChecker.checkInput(input)) throw new InputFormatException();
+        if (!InputChecker.checkInput(input)) throw new InputFormatException();
         formatChecker.checkFormat(InputPartition.part1st(input), InputPartition.part2nd(input));
     }
-
 
 
     public void processInput(String input) throws UserException, LogException, NetworkException {

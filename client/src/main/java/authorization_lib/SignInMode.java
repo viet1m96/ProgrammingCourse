@@ -3,7 +3,6 @@ package authorization_lib;
 import exceptions.log_exceptions.LogException;
 import exceptions.network_exception.NetworkException;
 import exceptions.user_exceptions.AccountInputException;
-import exceptions.user_exceptions.UserException;
 import goods.Request;
 import goods.Response;
 import iostream.Renderer;
@@ -18,8 +17,9 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignInMode implements AuthMode{
-    public SignInMode() {}
+public class SignInMode implements AuthMode {
+    public SignInMode() {
+    }
 
     @Override
     public Account executeAcc(ClientTransporter transporter, Renderer renderer) throws LogException, NetworkException {
@@ -34,7 +34,7 @@ public class SignInMode implements AuthMode{
         List<String> result = response.getResult();
         Account newAccount = null;
         renderer.printNotice(response);
-        if(result == null) {
+        if (result == null) {
             return null;
         } else {
             newAccount = new Account(username, password, result.get(0));
@@ -44,7 +44,7 @@ public class SignInMode implements AuthMode{
 
     public String getInputUsername(String notice) throws LogException {
         String username = "";
-        while(username.isEmpty()) {
+        while (username.isEmpty()) {
             try {
                 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
                 RainbowPrinter.printCondition(notice);
@@ -64,13 +64,13 @@ public class SignInMode implements AuthMode{
 
     public String getInputPassword(String notice) {
         String password = "";
-        while(password.isEmpty()) {
+        while (password.isEmpty()) {
             try {
                 Console console = System.console();
                 RainbowPrinter.printCondition(notice);
                 char[] pwdArray = console.readPassword();
                 password = new String(pwdArray);
-                if(password.isEmpty()) {
+                if (password.isEmpty()) {
                     throw new AccountInputException();
                 }
             } catch (AccountInputException e) {

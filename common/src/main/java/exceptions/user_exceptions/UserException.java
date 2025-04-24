@@ -6,9 +6,9 @@ package exceptions.user_exceptions;
  */
 public class UserException extends Exception {
 
-  /**
-   * Constructs a new {@code UserException} with no specific detail message.
-   */
-  public UserException() {
-  }
+    /**
+     * Constructs a new {@code UserException} with no specific detail message.
+     */
+    public UserException() {
+    }
 }

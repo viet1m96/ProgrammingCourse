@@ -24,6 +24,7 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
     private Semester semesterEnum;
     private Person groupAdmin;
     private String creator;
+
     public StudyGroup() {
     }
 
@@ -147,6 +148,7 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
     public void setSearchKey(String search_key) {
         this.search_key = search_key;
     }
+
     public String getSearchKey() {
         return search_key;
     }

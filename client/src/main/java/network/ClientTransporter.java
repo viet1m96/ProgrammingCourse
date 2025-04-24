@@ -45,7 +45,7 @@ public class ClientTransporter {
 
     public void shutDown() throws NetworkException {
         try {
-            if(channel != null) {
+            if (channel != null) {
                 channel.close();
             }
         } catch (IOException e) {
@@ -54,11 +54,11 @@ public class ClientTransporter {
         }
     }
 
-    public Response transport(Request request)  throws NetworkException, LogException {
-       buildAndConnect();
-       clientSender.sendPacket(channel, serverAddress, request);
-       Response response = clientReceiver.getAResponse(channel, MAX_PACKET_SIZE);
-       shutDown();
-       return response;
+    public Response transport(Request request) throws NetworkException, LogException {
+        buildAndConnect();
+        clientSender.sendPacket(channel, serverAddress, request);
+        Response response = clientReceiver.getAResponse(channel, MAX_PACKET_SIZE);
+        shutDown();
+        return response;
     }
 }

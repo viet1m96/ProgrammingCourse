@@ -10,6 +10,7 @@ public class LogException extends Exception {
      * Constructs a new {@code LogException} with a default error message.
      */
     private String message;
+
     public LogException(String message) {
         this.message = message;
     }

@@ -15,7 +15,9 @@ public class Coordinates implements Serializable {
     private Integer y;
 
 
-    public Coordinates() {}
+    public Coordinates() {
+    }
+
     public Coordinates(Integer x, Integer y) {
         this.x = x;
         this.y = y;
@@ -24,6 +26,7 @@ public class Coordinates implements Serializable {
     public void setX(Integer x) {
         this.x = x;
     }
+
     public void setY(Integer y) {
         this.y = y;
     }

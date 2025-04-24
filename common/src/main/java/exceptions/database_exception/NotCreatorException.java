@@ -1,7 +1,8 @@
 package exceptions.database_exception;
 
 public class NotCreatorException extends PostgresException {
-    public NotCreatorException() {}
+    public NotCreatorException() {
+    }
 
     @Override
     public String toString() {

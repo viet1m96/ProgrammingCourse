@@ -11,7 +11,8 @@ public class CommandManager {
     private final HashMap<String, Command> commandCollection = new HashMap<>();
 
 
-    public CommandManager() {}
+    public CommandManager() {
+    }
 
     public void init() {
         registerCommand("help", new HelpCommand());

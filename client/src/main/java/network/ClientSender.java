@@ -14,7 +14,9 @@ import java.nio.channels.DatagramChannel;
 
 public class ClientSender {
 
-    public ClientSender() {}
+    public ClientSender() {
+    }
+
     public void sendPacket(DatagramChannel channel, SocketAddress serverAddress, Request request) throws LogException {
         RainbowPrinter.printCondition("The " + request.getCmd() + " command is being executed!");
         try {

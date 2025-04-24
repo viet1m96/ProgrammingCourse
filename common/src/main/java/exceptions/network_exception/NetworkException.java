@@ -1,7 +1,8 @@
 package exceptions.network_exception;
 
 public class NetworkException extends Exception {
-    public NetworkException() {}
+    public NetworkException() {
+    }
 
     @Override
     public String toString() {

@@ -27,6 +27,7 @@ public class UpdateCommand extends Command {
 
     /**
      * Sets the receiver for this command. The receiver is responsible for the actual update operation.
+     *
      * @param receiver The receiver object.
      */
     public void setReceiver(Receiver receiver) {

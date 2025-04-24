@@ -37,7 +37,7 @@ public class Receiver {
     public Response sign_in(Request request) throws LogException {
         List<String> arguments = request.getArguments();
         boolean exist = clientAccountWorker.checkAccount(arguments.get(0), arguments.get(1));
-        if(exist) {
+        if (exist) {
             String token = JwtUtil.generateToken(arguments.get(0));
             List<String> result = new ArrayList<>();
             result.add(token);
@@ -52,7 +52,7 @@ public class Receiver {
     public Response sign_up(Request request) throws LogException, NameTakenException {
         List<String> arguments = request.getArguments();
         boolean insertSuccess = clientAccountWorker.insertNewAccount(arguments.get(0), arguments.get(1));
-        if(insertSuccess) {
+        if (insertSuccess) {
             List<String> result = new ArrayList<>();
             String token = JwtUtil.generateToken(arguments.get(0));
             result.add(token);
@@ -92,7 +92,7 @@ public class Receiver {
         return collectionManager.replace_if_lower(request);
     }
 
-    public Response remove_if_greater(Request request) throws LogException  {
+    public Response remove_if_greater(Request request) throws LogException {
         return collectionManager.remove_if_greater(request);
     }
 

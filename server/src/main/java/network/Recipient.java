@@ -20,6 +20,7 @@ public class Recipient implements Callable<Request> {
     private final BlockingQueue<Request> requestQueue;
     private final DatagramChannel channel;
     private final int MAX_PACKET_SIZE = 65507;
+
     public Recipient(DatagramChannel channel, BlockingQueue<Request> requestQueue) {
         this.requestQueue = requestQueue;
         this.channel = channel;
@@ -37,7 +38,7 @@ public class Recipient implements Callable<Request> {
             ObjectInputStream ois = new ObjectInputStream(bais);
             Request request = (Request) ois.readObject();
             buffer.clear();
-            if(request.getToken() != null) {
+            if (request.getToken() != null) {
                 RainbowPrinter.printCondition("Received connection from user: " + JwtUtil.getUsername(request.getToken()) + " at " + remoteAddress);
             } else {
                 RainbowPrinter.printCondition("Received connection from " + remoteAddress);

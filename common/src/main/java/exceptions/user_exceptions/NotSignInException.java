@@ -1,7 +1,8 @@
 package exceptions.user_exceptions;
 
 public class NotSignInException extends UserException {
-    public NotSignInException() {}
+    public NotSignInException() {
+    }
 
     @Override
     public String toString() {

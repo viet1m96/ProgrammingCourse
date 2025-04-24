@@ -124,6 +124,7 @@ public class Person implements Serializable {
     public void setId(Integer newId) {
         this.id = newId;
     }
+
     public Integer getId() {
         return id;
     }

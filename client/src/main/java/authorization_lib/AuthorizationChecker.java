@@ -10,7 +10,9 @@ import network.ClientTransporter;
 
 public class AuthorizationChecker {
     private AuthManager authManager;
-    public AuthorizationChecker() {}
+
+    public AuthorizationChecker() {
+    }
 
     public void init() {
         authManager = new AuthManager();
@@ -19,10 +21,10 @@ public class AuthorizationChecker {
 
     public boolean checkAuthorization(Account account, ClientTransporter transporter, Renderer renderer, String inp) throws NotSignInException, AlreadySignInException, LogException, NetworkException {
         String cmd = InputPartition.part1st(inp);
-        if(account.getToken() == null || account.getToken().isEmpty()) {
-            if(cmd.equals("sign_in") | cmd.equals("sign_up")) {
+        if (account.getToken() == null || account.getToken().isEmpty()) {
+            if (cmd.equals("sign_in") | cmd.equals("sign_up")) {
                 Account providedAccount = authManager.call(cmd, transporter, renderer);
-                if(providedAccount != null) {
+                if (providedAccount != null) {
                     account.setUsername(providedAccount.getUsername());
                     account.setPassword(providedAccount.getPassword());
                     account.setToken(providedAccount.getToken());
@@ -32,7 +34,7 @@ public class AuthorizationChecker {
                 throw new NotSignInException();
             }
         } else {
-            if(cmd.equals("sign_in") | cmd.equals("sign_up")) throw new AlreadySignInException();
+            if (cmd.equals("sign_in") | cmd.equals("sign_up")) throw new AlreadySignInException();
         }
         return true;
     }

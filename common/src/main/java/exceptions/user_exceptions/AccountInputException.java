@@ -1,7 +1,8 @@
 package exceptions.user_exceptions;
 
 public class AccountInputException extends UserException {
-    public AccountInputException() {}
+    public AccountInputException() {
+    }
 
     @Override
     public String toString() {

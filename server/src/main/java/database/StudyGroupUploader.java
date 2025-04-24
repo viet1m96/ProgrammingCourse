@@ -18,11 +18,13 @@ import java.util.List;
 
 public class StudyGroupUploader {
     private String uploadQuery = """
-                select study_groups.*, group_coordinates.*, group_admins.*, admin_locations.*, group_coordinates.group_id as coordinate_id, admin_locations.admin_id as location_id from study_groups
-                         left join group_coordinates on study_groups.group_id = group_coordinates.group_id
-                         left join group_admins on study_groups.group_id = group_admins.group_id
-                         left join admin_locations on group_admins.admin_id = admin_locations.admin_id""";
-    public StudyGroupUploader() {}
+            select study_groups.*, group_coordinates.*, group_admins.*, admin_locations.*, group_coordinates.group_id as coordinate_id, admin_locations.admin_id as location_id from study_groups
+                     left join group_coordinates on study_groups.group_id = group_coordinates.group_id
+                     left join group_admins on study_groups.group_id = group_admins.group_id
+                     left join admin_locations on group_admins.admin_id = admin_locations.admin_id""";
+
+    public StudyGroupUploader() {
+    }
 
 
     public List<StudyGroup> loadStudyGroups(Connection connection) throws LogException {
@@ -33,7 +35,7 @@ public class StudyGroupUploader {
                 while (resultSet.next()) {
                     Object adminID = resultSet.getObject("admin_id");
                     Object groupId = resultSet.getObject("coordinate_id");
-                    if(adminID == null || groupId == null) {
+                    if (adminID == null || groupId == null) {
                         RainbowPrinter.printInfo("Can not load the object on the " + line + " line");
                         line++;
                         continue;
@@ -46,7 +48,7 @@ public class StudyGroupUploader {
                     studyGroup.setStudentsCount(resultSet.getLong("student_counts"));
                     studyGroup.setExpelledStudents(resultSet.getLong("expelled_students"));
                     Object formEdu = resultSet.getObject("form_of_education");
-                    if(formEdu == null) {
+                    if (formEdu == null) {
                         studyGroup.setFormOfEducation(null);
                     } else {
                         studyGroup.setFormOfEducation(FormOfEducation.valueOf(formEdu.toString()));
@@ -63,13 +65,13 @@ public class StudyGroupUploader {
                     admin.setId(resultSet.getInt("admin_id"));
                     admin.setName(resultSet.getString("admin_name"));
                     Object birthDay = resultSet.getObject("birthday");
-                    if(birthDay == null) {
+                    if (birthDay == null) {
                         admin.setBirthDay(null);
                     } else {
                         admin.setBirthDay(LocalDate.parse(birthDay.toString()));
                     }
                     Object weight = resultSet.getObject("weight");
-                    if(weight == null) {
+                    if (weight == null) {
                         admin.setWeight(null);
                     } else {
                         admin.setWeight((Integer) weight);
@@ -77,14 +79,14 @@ public class StudyGroupUploader {
                     admin.setEyeColor(Color.valueOf(resultSet.getString("eye_color")));
                     Location location = new Location();
                     Object locationID = resultSet.getObject("location_id");
-                    if(locationID == null) {
+                    if (locationID == null) {
                         admin.setLocation(null);
                     } else {
                         location.setX(resultSet.getLong("x"));
                         location.setY(resultSet.getInt("y"));
                         location.setZ(resultSet.getInt("z"));
                         Object locationName = resultSet.getObject("place");
-                        if(locationName == null) {
+                        if (locationName == null) {
                             location.setName(null);
                         } else {
                             location.setName((String) locationName);
@@ -101,7 +103,7 @@ public class StudyGroupUploader {
             throw new LogException("Loading study groups failed");
         } finally {
             try {
-                if(connection != null) {
+                if (connection != null) {
                     connection.close();
                 }
             } catch (Exception e) {

@@ -1,7 +1,8 @@
 package exceptions.database_exception;
 
 public class UnsuccesfulDeletionException extends PostgresException {
-    public UnsuccesfulDeletionException() {}
+    public UnsuccesfulDeletionException() {
+    }
 
     @Override
     public String toString() {

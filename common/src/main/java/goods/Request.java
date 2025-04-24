@@ -1,12 +1,10 @@
 package goods;
 
 
-
 import main_objects.StudyGroup;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
 
@@ -19,13 +17,17 @@ public class Request implements Serializable {
     private StudyGroup studyGroup;
     private SocketAddress remoteAddress;
     private String token;
-    public Request() {}
+
+    public Request() {
+    }
+
     public Request(String cmd, List<String> arguments, StudyGroup studyGroup, String token) {
         this.cmd = cmd;
         this.arguments = arguments;
         this.studyGroup = studyGroup;
         this.token = token;
     }
+
     public Request(String cmd, List<String> arguments, String token) {
         this.cmd = cmd;
         this.arguments = arguments;
