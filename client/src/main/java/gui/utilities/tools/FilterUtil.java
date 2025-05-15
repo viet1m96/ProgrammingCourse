@@ -1,6 +1,5 @@
-package gui.utilities.pop_ups;
+package gui.utilities.tools;
 
-import gui.utilities.tools.AlertUtil;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import main_objects.StdGroupUltimate;

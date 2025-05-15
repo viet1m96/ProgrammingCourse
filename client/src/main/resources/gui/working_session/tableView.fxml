@@ -14,7 +14,7 @@
     <ScrollPane fitToHeight="true" prefHeight="500.0" prefWidth="640.0"
                 style="-fx-border-width: 0; -fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0"
                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="0.0">
-        <TableView fx:id="tableView" style="-fx-border-width: 2">
+        <TableView fx:id="tableView" style="-fx-border-width: 2" focusTraversable="false">
             <columns>
                 <TableColumn fx:id="keyColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="groupNameColumn" prefWidth="175.0"/>

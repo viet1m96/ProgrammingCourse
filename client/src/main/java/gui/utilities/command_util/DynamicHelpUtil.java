@@ -1,4 +1,4 @@
-package gui.utilities.pop_ups;
+package gui.utilities.command_util;
 
 import exceptions.network_exception.NetworkException;
 import goods.Request;
@@ -22,15 +22,15 @@ import network.Client;
 
 import java.util.List;
 
-public class DynamicHelpUtil extends BigPopUpUtil {
+public class DynamicHelpUtil extends DynamicPopUpUtil {
     private final String baseTable = "/il8n/tableView";
     public void showInstructionPopUp(ActionEvent actionEvent, ResourceManager resourceManager) {
         List<Instruction> instructions = handleRequest();
         if(instructions == null) return;
         Scene scene = initScene(resourceManager, instructions);
-        Stage stage = releasePopUp();
+        Stage stage = releaseBasicPopUp();
         stage.setScene(scene);
-        addBasicFuncs(stage, actionEvent, -800, -800);
+        givePositionPopUp(stage, actionEvent, -800, -800);
     }
 
     private TableView<Instruction> initTable(ResourceManager resourceManager, List<Instruction> instructions) {

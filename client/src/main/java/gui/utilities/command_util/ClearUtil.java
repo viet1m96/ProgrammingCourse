@@ -1,4 +1,4 @@
-package gui.utilities.pop_ups;
+package gui.utilities.command_util;
 
 import exceptions.network_exception.NetworkException;
 import goods.Request;

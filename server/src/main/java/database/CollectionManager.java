@@ -1,7 +1,7 @@
 package database;
 
 import authorization_lib.JwtUtil;
-import exceptions.database_exception.NotCreatorException;
+import exceptions.user_exceptions.NotCreatorException;
 import exceptions.database_exception.UnsuccesfulDeletionException;
 import exceptions.database_exception.UnsuccesfulInsertException;
 import exceptions.database_exception.UnsuccesfulUpdateException;
@@ -199,7 +199,7 @@ public class CollectionManager {
             }
             List<String> notice = new ArrayList<>();
             notice.add("The search key " + searchKey + " was deleted!");
-            return new Response(notice, null, request.getRemoteAddress());
+            return new Response(notice, null, request.getRemoteAddress(), true);
         }
         return response;
     }
@@ -263,7 +263,7 @@ public class CollectionManager {
                 collection.put(searchKey, studyGroup);
                 notice.add("The element with key " + searchKey + " was successfully updated");
             }
-            return new Response(notice, null, request.getRemoteAddress());
+            return new Response(notice, null, request.getRemoteAddress(), true);
         }
         return response;
     }
@@ -306,7 +306,7 @@ public class CollectionManager {
                     }
                 }
             }
-            return new Response(notice, null, request.getRemoteAddress());
+            return new Response(notice, null, request.getRemoteAddress(), true);
         }
         return response;
     }

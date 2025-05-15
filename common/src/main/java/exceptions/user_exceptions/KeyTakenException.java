@@ -19,6 +19,6 @@ public class KeyTakenException extends UserException {
      */
     @Override
     public String toString() {
-        return "keyTakenException";
+        return "key.taken";
     }
 }

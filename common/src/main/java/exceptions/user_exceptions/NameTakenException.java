@@ -6,6 +6,6 @@ public class NameTakenException extends UserException {
 
     @Override
     public String toString() {
-        return "NameTakenException";
+        return "name.taken";
     }
 }

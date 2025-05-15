@@ -5,7 +5,7 @@ import commands.Command;
 import database.ClientAccountWorker;
 import database.CollectionManager;
 import database.ConnectionCreator;
-import exceptions.database_exception.NotCreatorException;
+import exceptions.user_exceptions.NotCreatorException;
 import exceptions.database_exception.UnsuccesfulDeletionException;
 import exceptions.database_exception.UnsuccesfulInsertException;
 import exceptions.database_exception.UnsuccesfulUpdateException;
@@ -24,6 +24,7 @@ public class Receiver {
     private final CommandManager commandManager;
     private final ClientAccountWorker clientAccountWorker;
     private final String baseCommands = "commands";
+    private final String baseNotices = "notices";
     public Receiver(CollectionManager collectionManager, CommandManager commandManager, ConnectionCreator connectionCreator) throws EnvNotExistsException {
         clientAccountWorker = new ClientAccountWorker(connectionCreator);
         this.collectionManager = collectionManager;
@@ -68,7 +69,7 @@ public class Receiver {
             return response;
         } else {
             List<String> notice = new ArrayList<>();
-            notice.add("Your username or password is incorrect.");
+            notice.add(Translator.getString(baseNotices, "wrong.sign_in", request.getLocale()));
             Response response = new Response(notice, null, request.getRemoteAddress());
             response.setSuccess(Boolean.FALSE);
             return response;
@@ -88,7 +89,7 @@ public class Receiver {
             return response;
         } else {
             List<String> notice = new ArrayList<>();
-            notice.add("Your username already exists.");
+            notice.add("name.taken");
             Response response = new Response(notice, null, request.getRemoteAddress());
             response.setSuccess(Boolean.FALSE);
             return response;

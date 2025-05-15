@@ -1,5 +1,6 @@
-package gui.utilities.pop_ups;
+package gui.utilities.command_util;
 
+import gui.utilities.tools.FilterUtil;
 import gui.utilities.tools.ResourceManager;
 import gui.utilities.buttons.CancelButtonUtil;
 import javafx.collections.ObservableList;
@@ -21,12 +22,12 @@ public class DynamicFilterUtil extends DynamicPopUpUtil {
             , FilterUtil filterUtil
             , ObservableList<StdGroupUltimate> groups) {
 
-        Stage popupStage = releasePopUp();
+        Stage popupStage = releaseBasicPopUp();
         Scene popupScene = initScene(e, resourceManager, col, filterUtil, groups);
         String columnName = (String) col.getUserData();
         popupStage.setTitle(resourceManager.getString("/il8n/tableView", columnName));
         popupStage.setScene(popupScene);
-        addBasicFuncs(popupStage, e, 0, 0);
+        givePositionPopUp(popupStage, e, 0, 0);
     }
 
     private Scene initScene(ActionEvent e

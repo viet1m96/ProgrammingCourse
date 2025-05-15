@@ -1,4 +1,4 @@
-package gui.utilities.pop_ups;
+package gui.utilities.command_util;
 
 import gui.utilities.tools.ResourceManager;
 import javafx.event.ActionEvent;
@@ -16,7 +16,7 @@ import java.util.Queue;
 public class DynamicHistoryUtil extends DynamicPopUpUtil {
     public static void showHistoryPopUp(ResourceManager resourceManager, ActionEvent mainEvent) {
         Queue<String> history = CommandHistory.getHistory();
-        Stage popUpStage = releasePopUp();
+        Stage popUpStage = releaseBasicPopUp();
         VBox box = new VBox();
         box.setPadding(new Insets(10));
         box.setSpacing(5);
@@ -36,6 +36,6 @@ public class DynamicHistoryUtil extends DynamicPopUpUtil {
         Scene scene = new Scene(box);
         popUpStage.setScene(scene);
         popUpStage.setTitle(resourceManager.getString("/il8n/tableView", "history"));
-        addBasicFuncs(popUpStage, mainEvent, 0, 0);
+        givePositionPopUp(popUpStage, mainEvent, 0, 0);
     }
 }

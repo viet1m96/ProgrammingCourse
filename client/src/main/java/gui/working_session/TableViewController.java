@@ -3,8 +3,9 @@ package gui.working_session;
 import enums.Color;
 import enums.FormOfEducation;
 import enums.Semester;
-import gui.utilities.pop_ups.*;
+import gui.utilities.command_util.*;
 import gui.utilities.tools.*;
+import gui.working_session.std_grp_controllers.ChoicesCreator;
 import gui.working_session.std_grp_controllers.InsertController;
 import gui.working_session.std_grp_controllers.RemoveGreaterController;
 import javafx.application.Platform;
@@ -79,6 +80,9 @@ public class TableViewController implements Localizable {
     private  ObservableList<StdGroupUltimate> backUpGroups = FXCollections.observableArrayList();
     private final SortUtil sortUtil = new SortUtil();
     private final FilterUtil filterUtil = new FilterUtil();
+    private final ChoicesCreator choicesCreator = new ChoicesCreator();
+    private ContextMenu contextMenu;
+
     public void setGroups(ObservableList<StdGroupUltimate> groups, ObservableList<StdGroupUltimate> backUpGroups) {
         this.groups.setAll(groups);
         tableView.setItems(this.groups);
@@ -104,15 +108,32 @@ public class TableViewController implements Localizable {
         LanguageBoxUtil.updateLanguage(baseStarters, languageBox, resourceManager);
     }
     @FXML
-    public void handleMouseClicked(MouseEvent event) {
+    private void handleMouseClicked(MouseEvent event) {
         StdGroupUltimate clickedGroup = tableView.getSelectionModel().getSelectedItem();
-        if (clickedGroup == null) return;
 
-        if(event.getButton() == MouseButton.SECONDARY) {
-            selectedGroup = clickedGroup;
-            tableView.getSelectionModel().select(clickedGroup);
+        if (clickedGroup == null) {
+            hideContextMenu();
+            return;
+        }
+
+        if (event.getButton() == MouseButton.SECONDARY) {
+            hideContextMenu();
+
+            contextMenu = choicesCreator.createContextMenu(clickedGroup, resourceManager, tableView);
+            contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
+
+            event.consume();
+        } else {
+            hideContextMenu();
         }
     }
+    private void hideContextMenu() {
+        if (contextMenu != null && contextMenu.isShowing()) {
+            contextMenu.hide();
+            contextMenu = null;
+        }
+    }
+
     @FXML
     public void handleLanguageClicked(ActionEvent event) {
         LanguageBoxUtil.handleLanguageClicked(event, resourceManager, languageBox);
@@ -120,8 +141,8 @@ public class TableViewController implements Localizable {
 
     @FXML
     public void handleInsertButtonClicked(ActionEvent event) {
-        Stage stage = BigPopUpUtil.releaseNewPopUp(fxmlStdGrp, new InsertController());
-        BigPopUpUtil.addBasicFuncs(stage, event, -800, -800);
+        Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new InsertController());
+        DynamicPopUpUtil.givePositionPopUp(stage, tableView, 800, 800, 0, 0);
     }
     @FXML
     public void handleExitButtonClicked(ActionEvent event) {
@@ -139,10 +160,10 @@ public class TableViewController implements Localizable {
     }
     @FXML
     public void handleRemoveGreaterButtonClicked(ActionEvent event) {
-        Stage stage = BigPopUpUtil.releaseNewPopUp(fxmlStdGrp, new RemoveGreaterController());
-        BigPopUpUtil.addBasicFuncs(stage, event, -800, -800);
+        Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new RemoveGreaterController());
+        DynamicPopUpUtil.givePositionPopUp(stage, tableView, 800, 800, 0, 0);
     }
-    @FXML 
+    @FXML
     public void handleSignOutButtonClicked(ActionEvent event) throws IOException {
         Client.setAccount(null, null, null);
         FXMLLoaderUlti.changeSceneWithoutHistory(event, fxmlMain);

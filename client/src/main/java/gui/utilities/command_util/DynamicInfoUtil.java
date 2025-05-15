@@ -1,4 +1,4 @@
-package gui.utilities.pop_ups;
+package gui.utilities.command_util;
 
 import exceptions.network_exception.NetworkException;
 import goods.Request;
@@ -39,9 +39,9 @@ public class DynamicInfoUtil extends DynamicPopUpUtil {
         List<String> result = handleRequest();
         if(result == null) return;
         Scene scene = initScene(resourceManager, result);
-        Stage stage = releasePopUp();
+        Stage stage = releaseBasicPopUp();
         stage.setScene(scene);
-        addBasicFuncs(stage, event, -600, -200);
+        givePositionPopUp(stage, event, -600, -200);
     }
 
     public Scene initScene(ResourceManager resourceManager, List<String> results) {

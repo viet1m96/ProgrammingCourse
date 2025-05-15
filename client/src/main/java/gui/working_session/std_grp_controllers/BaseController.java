@@ -4,6 +4,9 @@ package gui.working_session.std_grp_controllers;
 import enums.Color;
 import enums.FormOfEducation;
 import enums.Semester;
+import goods.Request;
+import goods.Response;
+import gui.utilities.tools.AlertUtil;
 import gui.utilities.tools.Localizable;
 import gui.utilities.tools.ResourceManager;
 import gui.utilities.tools.TextUpdater;
@@ -19,13 +22,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import main_objects.StdGroupUltimate;
 
+import main_objects.StudyGroup;
 import network.Client;
 
+import utilities.StudyGrpTransformer;
 import validators.InputForAdminValidator;
 import validators.InputForGroupValidator;
 
 import java.time.LocalDate;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Predicate;
 
 public abstract class BaseController implements Localizable {
@@ -144,7 +151,7 @@ public abstract class BaseController implements Localizable {
 
     protected final String insertPop = "/il8n/insertPopUp";
     protected final String tableView = "/il8n/tableView";
-
+    protected final String baseCommands = "/il8n/commands";
     @FXML
     protected Button funcButton;
     @FXML
@@ -241,6 +248,7 @@ public abstract class BaseController implements Localizable {
     public abstract void setUpButtons();
     protected void setUpCancelButton() {
         cancelButton.setText(resourceManager.getString(insertPop, "cancel.button"));
+        cancelButton.setOnAction(this::handleCancelButtonClicked);
     }
     protected StdGroupUltimate getIn4() {
         StdGroupUltimate groupUltimate = new StdGroupUltimate();
@@ -317,6 +325,72 @@ public abstract class BaseController implements Localizable {
     public void handleCancelButtonClicked(ActionEvent event) {
         Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
         stage.close();
+    }
+
+    protected void sendClicked(String cmd, ActionEvent event) {
+        Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
+        System.out.println("here");
+        StdGroupUltimate groupUltimate = getIn4();
+        System.out.println("next");
+        StudyGroup studyGroup = StudyGrpTransformer.transformToNormal(groupUltimate);
+        List<String> arguments = new ArrayList<>();
+        arguments.add(searchKeyVal.getText());
+        try {
+            Request request = new Request(cmd, arguments, studyGroup, Client.getToken());
+            Response response = Client.work(request);
+            AlertUtil.showResultAlert(response);
+        } catch (Exception e) {
+            AlertUtil.showErrorAlert("Network Error", e.toString());
+        }
+        stage.close();
+    }
+
+    protected void setUpInfo(StdGroupUltimate updatingGroup) {
+        searchKeyVal.setText(updatingGroup.getSearch_key());
+        groupNameVal.setText(updatingGroup.getGroup_name());
+        studCountVal.setText(updatingGroup.getStudent_count().toString());
+        expStudentVal.setText(updatingGroup.getExpelled_students().toString());
+        if(updatingGroup.getForm_of_education() == null) {
+            formEduVal.setText("");
+        } else {
+            formEduVal.setText(updatingGroup.getForm_of_education().toString());
+        }
+        semesterVal.setText(updatingGroup.getSemester().toString());
+        groupXVal.setText(updatingGroup.getGroup_x().toString());
+        groupYVal.setText(updatingGroup.getGroup_y().toString());
+        adminNameVal.setText(updatingGroup.getAdmin_name());
+        if(updatingGroup.getBirthday() == null) {
+            birthdayVal.setText("");
+        } else {
+            birthdayVal.setText(updatingGroup.getBirthday().toString());
+        }
+        if(updatingGroup.getWeight() == null) {
+            weightVal.setText("");
+        } else {
+            weightVal.setText(updatingGroup.getWeight().toString());
+        }
+        eyeColorVal.setText(updatingGroup.getEye_color().toString());
+        if(updatingGroup.getX() == null) {
+            xVal.setText("");
+        } else {
+            xVal.setText(updatingGroup.getX().toString());
+        }
+        if(updatingGroup.getY() == null) {
+            yVal.setText("");
+        } else {
+            yVal.setText(updatingGroup.getY().toString());
+        }
+        if(updatingGroup.getZ() == null) {
+            zVal.setText("");
+        } else {
+            zVal.setText(updatingGroup.getZ().toString());
+        }
+        if(updatingGroup.getPlace() == null) {
+            placeVal.setText("");
+        } else {
+            placeVal.setText(updatingGroup.getPlace());
+        }
+        searchKeyVal.setEditable(false);
     }
 
 }

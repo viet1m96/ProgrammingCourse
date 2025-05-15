@@ -26,23 +26,10 @@ public class InsertController extends BaseController {
         setUpCancelButton();
         setUpFuncButton();
         funcButton.setOnAction(this::handleInsertButtonClicked);
-        cancelButton.setOnAction(this::handleCancelButtonClicked);
     }
 
     @FXML
     public void handleInsertButtonClicked(ActionEvent event) {
-        Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
-        StdGroupUltimate groupUltimate = getIn4();
-        StudyGroup studyGroup = StudyGrpTransformer.transformToNormal(groupUltimate);
-        List<String> arguments = new ArrayList<>();
-        arguments.add(searchKeyVal.getText());
-        try {
-            Request request = new Request("insert", arguments, studyGroup, Client.getToken());
-            Response response = Client.work(request);
-            AlertUtil.showResultAlert(response);
-        } catch (Exception e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
-        }
-        stage.close();
+        sendClicked("insert", event);
     }
 }

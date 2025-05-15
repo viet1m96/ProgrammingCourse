@@ -22,6 +22,6 @@ module demo.client {
     exports gui.utilities.buttons;
     exports gui.working_session.std_grp_controllers;
     opens gui.working_session.std_grp_controllers to javafx.fxml;
-    exports gui.utilities.pop_ups;
+    exports gui.utilities.command_util;
     exports gui.utilities.tools;
 }
