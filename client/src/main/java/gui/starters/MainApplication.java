@@ -73,7 +73,7 @@ public class MainApplication extends Application implements Localizable {
 
     public static void main(String[] args) {
         Thread.setDefaultUncaughtExceptionHandler((t, e) -> {
-            AlertUtil.showErrorAlert("Fatal exception in thread: " + t.getName(), e.toString());
+            AlertUtil.showErrorAlert("Fatal exception in thread: " + t.getName(), e.toString(), (Stage)null);
             LogUtil.logTrace(e);
         });
         ClientTransporter transporter = new ClientTransporter();

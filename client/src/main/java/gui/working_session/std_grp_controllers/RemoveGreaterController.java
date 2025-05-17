@@ -35,9 +35,9 @@ public class RemoveGreaterController extends BaseController {
         try {
             Request request = new Request("remove_greater", null, studyGroup, Client.getToken());
             Response response = Client.work(request);
-            AlertUtil.showResultAlert(response);
+            AlertUtil.showResultAlert(response, event);
         } catch (Exception e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
+            AlertUtil.showErrorAlert("Network Error", e.toString(), event);
         }
         stage.close();
     }

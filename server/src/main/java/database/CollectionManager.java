@@ -312,6 +312,65 @@ public class CollectionManager {
     }
 
 
+    public Response print_ascending(Request request) {
+        Response response = checkEmpty(request);
+        if (response == null) {
+            synchronized (collection) {
+                List<StudyGroup> elements = new ArrayList<>(collection.values().stream().toList());
+                Collections.sort(elements);
+                List<StudyGroup> result = new ArrayList<>(elements);
+                response = new Response(new ArrayList<>(), null, request.getRemoteAddress(), true);
+                response.setStudyGroups(result);
+                return response;
+            }
+        }
+        return response;
+    }
+
+    /**
+     * Displays the elements of the collection in descending order.
+     *
+     * @param request The request object.
+     * @return A `Response` object containing the elements of the collection in descending order.
+     */
+    public Response print_descending(Request request) {
+        Response response = checkEmpty(request);
+        if (response == null) {
+            synchronized (collection) {
+                List<StudyGroup> elements = new ArrayList<>(collection.values().stream().toList());
+                elements.sort(Collections.reverseOrder());
+                List<StudyGroup> result = new ArrayList<>(elements);
+                response = new Response(new ArrayList<>(), null, request.getRemoteAddress(), true);
+                response.setStudyGroups(result);
+                return response;
+            }
+        }
+        return response;
+    }
+
+    /**
+     * Displays the semester enum field in descending order.
+     *
+     * @param request The request object.
+     * @return A `Response` object containing the semester enum field in descending order.
+     */
+    public Response print_field_descending_semester_enum(Request request) {
+        Response response = checkEmpty(request);
+        if (response == null) {
+            synchronized (collection) {
+                List<StudyGroup> temp_result = new ArrayList<>(collection.values().stream().toList());
+                temp_result.sort(Comparator.comparing(StudyGroup::getSemesterEnum));
+                Collections.reverse(temp_result);
+                List<StudyGroup> result = new ArrayList<>(temp_result);
+                response = new Response(new ArrayList<>(), null, request.getRemoteAddress(), true);
+                response.setStudyGroups(result);
+                return response;
+            }
+        }
+        return response;
+    }
+
+
     /**
      * Uploads data from the database into the collection.
      *
@@ -329,5 +388,8 @@ public class CollectionManager {
             throw new LogException("Data upload failed");
         }
     }
+
+
+
 
 }

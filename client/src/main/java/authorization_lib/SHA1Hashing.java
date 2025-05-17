@@ -1,5 +1,6 @@
 package authorization_lib;
 
+import javafx.stage.Stage;
 import logging.LogUtil;
 import gui.utilities.tools.AlertUtil;
 
@@ -21,7 +22,7 @@ public class SHA1Hashing {
             return hexString.toString();
         } catch (NoSuchAlgorithmException e) {
             LogUtil.logTrace(e);
-            AlertUtil.showErrorAlert("Unsuccessfully", "Hashing failed!");
+            AlertUtil.showErrorAlert("Unsuccessfully", "Hashing failed!", (Stage)null);
         }
         return null;
     }

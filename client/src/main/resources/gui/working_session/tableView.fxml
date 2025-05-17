@@ -47,7 +47,7 @@
         <Button fx:id="removeGreater" mnemonicParsing="false" prefWidth="185.0" onAction="#handleRemoveGreaterButtonClicked"/>
         <Button fx:id="instructionButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleInstructionButtonClicked"/>
         <Button fx:id="informationButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleInformationButtonClicked"/>
-        <Button fx:id="scriptButton" mnemonicParsing="false" prefWidth="185.0"/>
+        <Button fx:id="scriptButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleExecuteScriptButtonClicked"/>
         <Button fx:id="clearFilterButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleClearFiltersButtonClicked"/>
         <Button fx:id="signOutButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleSignOutButtonClicked"/>
         <ComboBox fx:id="languageBox" onAction="#handleLanguageClicked" prefWidth="185.0"/>

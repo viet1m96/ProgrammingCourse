@@ -7,4 +7,5 @@ module common {
     opens main_objects;
     exports enums;
     exports utilities;
+    exports exceptions.user_exceptions;
 }

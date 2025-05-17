@@ -4,6 +4,7 @@ import enums.SortType;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
 import main_objects.StdGroupUltimate;
 
 import java.lang.reflect.Field;
@@ -48,7 +49,7 @@ public class SortUtil {
                     return 0;
                 }
             } catch (NoSuchFieldException | IllegalAccessException e) {
-                AlertUtil.showErrorAlert("Sort Failed", e.getMessage());
+                AlertUtil.showErrorAlert("Sort Failed", e.getMessage(), (Stage)null);
                 return 0;
             }
         };

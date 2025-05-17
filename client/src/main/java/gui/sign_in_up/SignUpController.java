@@ -118,13 +118,13 @@ public class SignUpController implements Localizable {
         Request request = new Request("sign_up", arguments, null);
         try {
             Response response = Client.work(request);
-            AlertUtil.showResultAlert(response);
+            AlertUtil.showResultAlert(response, actionEvent);
             if(response.getSuccess()) {
                 Client.setAccount(arguments.get(0), arguments.get(1), request.getToken());
                 FXMLLoaderUlti.changeSceneWithoutHistory(actionEvent, "/gui/working_session/mainView.fxml");
             }
         } catch (NetworkException e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
+            AlertUtil.showErrorAlert("Network Error", e.toString(), actionEvent);
         }
     }
 }

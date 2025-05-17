@@ -29,6 +29,9 @@ public class CommandManager {
         registerCommand("sign_up", new SignUpCommand());
         registerCommand("sign_out", new SignOutCommand());
         registerCommand("history", new HistoryCommand());
+        registerCommand("print_descending", new Print_descendingCommand());
+        registerCommand("print_ascending", new Print_ascendingCommand());
+        registerCommand("print_field_descending_semester_enum", new Print_semesterEnumCommand());
 
     }
 

@@ -29,9 +29,9 @@ public class RemoveKeyUtil {
         Request request = new Request("remove_key", arguments, Client.getToken());
         try {
             Response response = Client.work(request);
-            AlertUtil.showResultAlert(response);
+            AlertUtil.showResultAlert(response, (Stage)null);
         } catch (NetworkException e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
+            AlertUtil.showErrorAlert("Network Error", e.toString(), (Stage)null);
         }
     }
 

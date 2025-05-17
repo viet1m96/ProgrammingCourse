@@ -98,13 +98,13 @@ public class SignInController implements Localizable {
         arguments.forEach(System.out::println);
         try {
             Response response = Client.work(request);
-            AlertUtil.showResultAlert(response);
+            AlertUtil.showResultAlert(response, actionEvent);
             if(response.getSuccess()) {
                 Client.setAccount(arguments.get(0), arguments.get(1), response.getResult().get(0));
                 FXMLLoaderUlti.changeSceneWithoutHistory(actionEvent, "/gui/working_session/mainView.fxml");
             }
         } catch (NetworkException e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
+            AlertUtil.showErrorAlert("Network Error", e.toString(), actionEvent);
         }
 
     }

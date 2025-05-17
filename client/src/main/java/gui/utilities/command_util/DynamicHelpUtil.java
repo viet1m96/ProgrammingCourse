@@ -23,7 +23,7 @@ import network.Client;
 import java.util.List;
 
 public class DynamicHelpUtil extends DynamicPopUpUtil {
-    private final String baseTable = "/il8n/tableView";
+    private static final String baseTable = "/il8n/tableView";
     public void showInstructionPopUp(ActionEvent actionEvent, ResourceManager resourceManager) {
         List<Instruction> instructions = handleRequest();
         if(instructions == null) return;
@@ -33,7 +33,7 @@ public class DynamicHelpUtil extends DynamicPopUpUtil {
         givePositionPopUp(stage, actionEvent, -800, -800);
     }
 
-    private TableView<Instruction> initTable(ResourceManager resourceManager, List<Instruction> instructions) {
+    public static TableView<Instruction> initTable(ResourceManager resourceManager, List<Instruction> instructions) {
         TableView<Instruction> tableView = new TableView<>();
         TableColumn<Instruction, String> commandColumn = new TableColumn<>(resourceManager.getString(baseTable, "command"));
         commandColumn.setCellValueFactory(new PropertyValueFactory<>("command"));
@@ -84,7 +84,7 @@ public class DynamicHelpUtil extends DynamicPopUpUtil {
             Response response = Client.work(request);
             instructions = response.getInstructions();
         } catch (NetworkException e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
+            AlertUtil.showErrorAlert("Network Error", e.toString(), (Stage)null);
             return null;
         }
         return instructions;

@@ -3,6 +3,12 @@ package gui.working_session;
 import enums.Color;
 import enums.FormOfEducation;
 import enums.Semester;
+import file_processor.gui_file.FileSelector;
+import file_processor.gui_file.ResultRender;
+import file_processor.logic.CommandArgClassifier;
+import file_processor.logic.CommandTypeClassifier;
+import file_processor.logic.CommandVBoxClassifier;
+import file_processor.logic.FileReaderMode;
 import gui.utilities.command_util.*;
 import gui.utilities.tools.*;
 import gui.working_session.std_grp_controllers.ChoicesCreator;
@@ -12,6 +18,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -28,6 +35,8 @@ import network.Client;
 import network.CommandHistory;
 
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
 
@@ -107,67 +116,7 @@ public class TableViewController implements Localizable {
         setUpButtons();
         LanguageBoxUtil.updateLanguage(baseStarters, languageBox, resourceManager);
     }
-    @FXML
-    private void handleMouseClicked(MouseEvent event) {
-        StdGroupUltimate clickedGroup = tableView.getSelectionModel().getSelectedItem();
 
-        if (clickedGroup == null) {
-            hideContextMenu();
-            return;
-        }
-
-        if (event.getButton() == MouseButton.SECONDARY) {
-            hideContextMenu();
-
-            contextMenu = choicesCreator.createContextMenu(clickedGroup, resourceManager, tableView);
-            contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
-
-            event.consume();
-        } else {
-            hideContextMenu();
-        }
-    }
-    private void hideContextMenu() {
-        if (contextMenu != null && contextMenu.isShowing()) {
-            contextMenu.hide();
-            contextMenu = null;
-        }
-    }
-
-    @FXML
-    public void handleLanguageClicked(ActionEvent event) {
-        LanguageBoxUtil.handleLanguageClicked(event, resourceManager, languageBox);
-    }
-
-    @FXML
-    public void handleInsertButtonClicked(ActionEvent event) {
-        Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new InsertController());
-        DynamicPopUpUtil.givePositionPopUp(stage, tableView, 800, 800, 0, 0);
-    }
-    @FXML
-    public void handleExitButtonClicked(ActionEvent event) {
-        System.exit(0);
-    }
-    @FXML
-    public void handleInstructionButtonClicked(ActionEvent event) {
-        DynamicHelpUtil helpPopUpUtil = new DynamicHelpUtil();
-        helpPopUpUtil.showInstructionPopUp(event, resourceManager);
-    }
-    @FXML
-    public void handleInformationButtonClicked(ActionEvent event) {
-        DynamicInfoUtil infoPopUpUtil = new DynamicInfoUtil();
-        infoPopUpUtil.showInfoPopup(resourceManager, event);
-    }
-    @FXML
-    public void handleRemoveGreaterButtonClicked(ActionEvent event) {
-        Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new RemoveGreaterController());
-        DynamicPopUpUtil.givePositionPopUp(stage, tableView, 800, 800, 0, 0);
-    }
-    @FXML
-    public void handleSignOutButtonClicked(ActionEvent event) throws IOException {
-        Client.setAccount(null, null, null);
-        FXMLLoaderUlti.changeSceneWithoutHistory(event, fxmlMain);
-    }
     private void setUpButtons() {
         insertButton.setText(resourceManager.getString(baseTable, "insert"));
         historyButton.setText(resourceManager.getString(baseTable, "history"));
@@ -263,5 +212,81 @@ public class TableViewController implements Localizable {
                }
            });
         });
+    }
+
+    @FXML
+    private void handleMouseClicked(MouseEvent event) {
+        StdGroupUltimate clickedGroup = tableView.getSelectionModel().getSelectedItem();
+
+        if (clickedGroup == null) {
+            hideContextMenu();
+            return;
+        }
+
+        if (event.getButton() == MouseButton.SECONDARY) {
+            hideContextMenu();
+
+            contextMenu = choicesCreator.createContextMenu(clickedGroup, resourceManager, tableView);
+            contextMenu.show(tableView, event.getScreenX(), event.getScreenY());
+
+            event.consume();
+        } else {
+            hideContextMenu();
+        }
+    }
+    private void hideContextMenu() {
+        if (contextMenu != null && contextMenu.isShowing()) {
+            contextMenu.hide();
+            contextMenu = null;
+        }
+    }
+
+    @FXML
+    public void handleLanguageClicked(ActionEvent event) {
+        LanguageBoxUtil.handleLanguageClicked(event, resourceManager, languageBox);
+    }
+
+    @FXML
+    public void handleInsertButtonClicked(ActionEvent e) {
+        Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new InsertController());
+        DynamicPopUpUtil.givePositionPopUp(stage, tableView, 800, 800, 0, 0);
+    }
+    @FXML
+    public void handleExitButtonClicked(ActionEvent event) {
+        System.exit(0);
+    }
+    @FXML
+    public void handleInstructionButtonClicked(ActionEvent event) {
+        DynamicHelpUtil helpPopUpUtil = new DynamicHelpUtil();
+        helpPopUpUtil.showInstructionPopUp(event, resourceManager);
+    }
+    @FXML
+    public void handleInformationButtonClicked(ActionEvent event) {
+        DynamicInfoUtil infoPopUpUtil = new DynamicInfoUtil();
+        infoPopUpUtil.showInfoPopup(resourceManager, event);
+    }
+    @FXML
+    public void handleRemoveGreaterButtonClicked(ActionEvent event) {
+        Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new RemoveGreaterController());
+        DynamicPopUpUtil.givePositionPopUp(stage, tableView, 800, 800, 0, 0);
+    }
+    @FXML
+    public void handleSignOutButtonClicked(ActionEvent event) throws IOException {
+        Client.setAccount(null, null, null);
+        FXMLLoaderUlti.changeSceneWithoutHistory(event, fxmlMain);
+    }
+
+    @FXML
+    public void handleExecuteScriptButtonClicked(ActionEvent event) {
+        CommandTypeClassifier.init();
+        CommandArgClassifier.init();
+        CommandVBoxClassifier.init();
+        File file = FileSelector.getFileAddress(new Stage());
+        if(file != null) {
+            ResultRender resultRender = new ResultRender();
+            resultRender.initRenderStage(resourceManager, event, tableView);
+            FileReaderMode fileReaderMode = new FileReaderMode(resourceManager, resultRender);
+            fileReaderMode.mainProcess(file.getAbsolutePath());
+        }
     }
 }

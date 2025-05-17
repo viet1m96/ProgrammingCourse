@@ -14,6 +14,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 import main_objects.StdGroupUltimate;
 import main_objects.StudyGroup;
 import network.Client;
@@ -88,7 +89,7 @@ public class MainViewController implements Localizable {
                     tableViewController.applyFilters();
                 });
             } catch (NetworkException e) {
-                AlertUtil.showErrorAlert("Network Error", "Network Broken");
+                AlertUtil.showErrorAlert("Network Error", "Network Broken", (Stage)null);
             }
         }, 0, 1, TimeUnit.SECONDS);
     }

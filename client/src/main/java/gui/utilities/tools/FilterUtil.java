@@ -2,6 +2,7 @@ package gui.utilities.tools;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.stage.Stage;
 import main_objects.StdGroupUltimate;
 
 import java.lang.reflect.InvocationTargetException;
@@ -66,7 +67,7 @@ public class FilterUtil {
                 }
                 return value.toString().contains(filterValue);
             } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                AlertUtil.showErrorAlert("Filter Failed", e.getMessage());
+                AlertUtil.showErrorAlert("Filter Failed", e.getMessage(), (Stage)null );
                 return false;
             }
         }

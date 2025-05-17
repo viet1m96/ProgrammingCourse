@@ -32,21 +32,21 @@ public class DynamicPopUpUtil {
         popupStage.initModality(Modality.APPLICATION_MODAL);
         popupStage.initStyle(StageStyle.UTILITY);
         return popupStage;
-
     }
 
     public static Stage releaseBasicPopUp(String fxmlPath, BaseController controller) {
+        Stage popupStage = releaseBasicPopUp();
         try {
             FXMLLoader loader = new FXMLLoader(FXMLLoaderUlti.class.getResource(fxmlPath));
             loader.setController(controller);
             Parent root = loader.load();
-            Stage popupStage = releaseBasicPopUp();
+            popupStage = releaseBasicPopUp();
             Scene scene = new Scene(root);
             popupStage.setScene(scene);
             return popupStage;
         } catch (IOException e) {
             LogUtil.logTrace(e);
-            AlertUtil.showErrorAlert("Couldn't load FXML file", e.getMessage());
+            AlertUtil.showErrorAlert("Couldn't load FXML file", e.getMessage(), popupStage);
         }
         return null;
     }

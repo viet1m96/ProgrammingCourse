@@ -129,4 +129,17 @@ public class Receiver {
     }
 
 
+    public Response print_ascending(Request request) throws UserException {
+        return collectionManager.print_ascending(request);
+    }
+
+    public Response print_descending(Request request) throws UserException {
+        return collectionManager.print_descending(request);
+    }
+
+    public Response print_field_descending_semester_enum(Request request) {
+        return collectionManager.print_field_descending_semester_enum(request);
+    }
+
+
 }

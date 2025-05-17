@@ -338,9 +338,9 @@ public abstract class BaseController implements Localizable {
         try {
             Request request = new Request(cmd, arguments, studyGroup, Client.getToken());
             Response response = Client.work(request);
-            AlertUtil.showResultAlert(response);
+            AlertUtil.showResultAlert(response, event);
         } catch (Exception e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
+            AlertUtil.showErrorAlert("Network Error", e.toString(), event);
         }
         stage.close();
     }

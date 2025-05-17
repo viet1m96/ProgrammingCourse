@@ -29,7 +29,7 @@ public class DynamicInfoUtil extends DynamicPopUpUtil {
             Response response = Client.work(request);
             result = response.getResult();
         } catch (NetworkException e) {
-            AlertUtil.showErrorAlert("Network Error", e.toString());
+            AlertUtil.showErrorAlert("Network Error", e.toString(), (Stage)null);
             return null;
         }
         return result;
