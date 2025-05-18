@@ -45,9 +45,9 @@ public class MainViewController implements Localizable {
         tableViewController = TableViewLoader.getController();
         TableViewTab.setContent(tableViewRoot);
 
-        FXMLLoader VisualizationLoader = new FXMLLoader(getClass().getResource("/gui/working_session/visualizationView.fxml"));
+        FXMLLoader VisualizationLoader = new FXMLLoader(getClass().getResource("/gui/working_session/visualView.fxml"));
         AnchorPane visualizationViewRoot = VisualizationLoader.load();
-        VisualizationViewController visualizationViewController = VisualizationLoader.getController();
+        visualizationViewController = VisualizationLoader.getController();
         VisualizationViewTab.setContent(visualizationViewRoot);
         setUpTabName();
         tabPane.getSelectionModel().select(TableViewTab);
@@ -87,6 +87,8 @@ public class MainViewController implements Localizable {
                     tableViewController.setGroups(newGroups, newBackUpGroups);
                     tableViewController.applySort();
                     tableViewController.applyFilters();
+
+                    visualizationViewController.setGroups(newGroups);
                 });
             } catch (NetworkException e) {
                 AlertUtil.showErrorAlert("Network Error", "Network Broken", (Stage)null);

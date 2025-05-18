@@ -19,6 +19,6 @@ public class InputFormatException extends UserException {
      */
     @Override
     public String toString() {
-        return "Input Format is wrong! Please try again.";
+        return "input.format.exp";
     }
 }

@@ -19,6 +19,6 @@ public class WrongInputException extends UserException {
      */
     @Override
     public String toString() {
-        return "Wrong input, please try again";
+        return "wrong.input.exp";
     }
 }

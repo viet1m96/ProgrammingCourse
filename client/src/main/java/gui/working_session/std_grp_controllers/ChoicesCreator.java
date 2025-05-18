@@ -3,6 +3,7 @@ package gui.working_session.std_grp_controllers;
 import gui.utilities.command_util.DynamicPopUpUtil;
 import gui.utilities.command_util.RemoveKeyUtil;
 import gui.utilities.tools.ResourceManager;
+import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableView;
@@ -14,7 +15,7 @@ public class ChoicesCreator {
 
     private final String baseCommands = "/il8n/commands";
     private final String fxmlStdGrp = "/gui/working_session/StdGrpPopUp.fxml";
-    public ContextMenu createContextMenu(StdGroupUltimate groupUltimate, ResourceManager resourceManager, TableView<StdGroupUltimate> tableView) {
+    public ContextMenu createContextMenu(StdGroupUltimate groupUltimate, ResourceManager resourceManager, Node tableView) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem updateItem = updateItem(contextMenu, resourceManager, tableView, groupUltimate);
         MenuItem replaceItem = replaceItem(contextMenu, resourceManager, tableView, groupUltimate);
@@ -24,7 +25,7 @@ public class ChoicesCreator {
         return contextMenu;
     }
 
-    private MenuItem updateItem(ContextMenu menu, ResourceManager resourceManager, TableView<StdGroupUltimate> tableView, StdGroupUltimate groupUltimate) {
+    private MenuItem updateItem(ContextMenu menu, ResourceManager resourceManager, Node tableView, StdGroupUltimate groupUltimate) {
         MenuItem updateItem = new MenuItem(resourceManager.getString(baseCommands, "update"));
         updateItem.setOnAction(event -> {
             Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new UpdateController(groupUltimate));
@@ -34,7 +35,7 @@ public class ChoicesCreator {
         return updateItem;
     }
 
-    private MenuItem replaceItem(ContextMenu menu, ResourceManager resourceManager, TableView<StdGroupUltimate> tableView, StdGroupUltimate groupUltimate) {
+    private MenuItem replaceItem(ContextMenu menu, ResourceManager resourceManager, Node tableView, StdGroupUltimate groupUltimate) {
         MenuItem replaceItem = new MenuItem(resourceManager.getString(baseCommands, "replace_if_lower"));
         replaceItem.setOnAction(event -> {
             Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new ReplaceController(groupUltimate));
@@ -44,7 +45,7 @@ public class ChoicesCreator {
         return replaceItem;
     }
 
-    private MenuItem removeItem(ContextMenu menu, ResourceManager resourceManager, TableView<StdGroupUltimate> tableView, StdGroupUltimate groupUltimate) {
+    private MenuItem removeItem(ContextMenu menu, ResourceManager resourceManager, Node tableView, StdGroupUltimate groupUltimate) {
         MenuItem removeItem = new MenuItem(resourceManager.getString(baseCommands, "remove_key"));
         removeItem.setOnAction(event -> {
             RemoveKeyUtil removeKeyUtil = new RemoveKeyUtil();
@@ -54,7 +55,7 @@ public class ChoicesCreator {
         return removeItem;
     }
 
-    private MenuItem detailItem(ContextMenu menu, ResourceManager resourceManager, TableView<StdGroupUltimate> tableView, StdGroupUltimate groupUltimate) {
+    private MenuItem detailItem(ContextMenu menu, ResourceManager resourceManager, Node tableView, StdGroupUltimate groupUltimate) {
         MenuItem detailItem = new MenuItem(resourceManager.getString(baseCommands, "details"));
         detailItem.setOnAction(event -> {
             Stage stage = DynamicPopUpUtil.releaseBasicPopUp(fxmlStdGrp, new SeeDetailsUtil(groupUltimate));

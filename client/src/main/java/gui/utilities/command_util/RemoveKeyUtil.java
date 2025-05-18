@@ -7,6 +7,7 @@ import gui.utilities.tools.AlertUtil;
 import gui.utilities.tools.ResourceManager;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -35,7 +36,7 @@ public class RemoveKeyUtil {
         }
     }
 
-    public void questionChoice(TableView<StdGroupUltimate> tableView, StdGroupUltimate group, ResourceManager resourceManager) {
+    public void questionChoice(Node tableView, StdGroupUltimate group, ResourceManager resourceManager) {
         Stage stage = DynamicPopUpUtil.releaseBasicPopUp();
         Label questionLabel = new Label(resourceManager.getString(baseCommands, "confirm.delete") + " " + group.getSearch_key() + " ?");
         questionLabel.setWrapText(true);

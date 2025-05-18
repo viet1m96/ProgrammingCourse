@@ -94,6 +94,11 @@ public abstract class BaseController implements Localizable {
     protected Text groupYCondition;
 
     @FXML
+    protected Label creator;
+    @FXML
+    protected TextField creatorVal;
+
+    @FXML
     protected Label adminName;
     @FXML
     protected TextField adminNameVal;
@@ -201,6 +206,10 @@ public abstract class BaseController implements Localizable {
         setUpOneCondition(semester, semesterVal, semesterCondition, "semester", "semester_con", semesterValid, InputForGroupValidator.isValidSemester);
         setUpOneCondition(groupX, groupXVal, groupXCondition, "group_x", "group_x_con", groupXValid, InputForGroupValidator.isValidGroupX);
         setUpOneCondition(groupY, groupYVal, groupYCondition, "group_y", "group_y_con", groupYValid, InputForGroupValidator.isValidGroupY);
+        creator.setDisable(true);
+        creator.setVisible(false);
+        creatorVal.setDisable(true);
+        creatorVal.setVisible(false);
     }
 
     private void addTextForAdmin() {
@@ -213,6 +222,9 @@ public abstract class BaseController implements Localizable {
         setUpOneCondition(z, zVal, zCondition, "z", "xyz_con", zValid, InputForAdminValidator.isValidCoordinate);
         setUpOneCondition(place, placeVal, placeCondition, "place", "place_con", placeValid, InputForAdminValidator.isValidPlace);
         placeVal.setDisable(true);
+        xVal.textProperty().addListener((obs, oldVal, newVal) -> coordinateValidator.run());
+        yVal.textProperty().addListener((obs, oldVal, newVal) -> coordinateValidator.run());
+        zVal.textProperty().addListener((obs, oldVal, newVal) -> coordinateValidator.run());
         xVal.textProperty().addListener((observable, oldValue, newValue) -> updatePlaceValEnablement());
         yVal.textProperty().addListener((observable, oldValue, newValue) -> updatePlaceValEnablement());
         zVal.textProperty().addListener((observable, oldValue, newValue) -> updatePlaceValEnablement());
@@ -237,6 +249,38 @@ public abstract class BaseController implements Localizable {
         });
     }
 
+    private final Runnable coordinateValidator = () -> {
+        String xText = xVal.getText();
+        String yText = yVal.getText();
+        String zText = zVal.getText();
+
+        boolean xEmpty = xText.isEmpty();
+        boolean yEmpty = yText.isEmpty();
+        boolean zEmpty = zText.isEmpty();
+
+        boolean anyNonEmpty = !xEmpty || !yEmpty || !zEmpty;
+
+        boolean isValid;
+        if (anyNonEmpty) {
+            boolean allNonEmpty = !xEmpty && !yEmpty && !zEmpty;
+            boolean xValidCoord = InputForAdminValidator.isValidCoordinate.test(xText);
+            boolean yValidCoord = InputForAdminValidator.isValidCoordinate.test(yText);
+            boolean zValidCoord = InputForAdminValidator.isValidCoordinate.test(zText);
+            isValid = allNonEmpty && xValidCoord && yValidCoord && zValidCoord;
+        } else {
+            isValid = true;
+        }
+
+        xValid.set(isValid);
+        yValid.set(isValid);
+        zValid.set(isValid);
+
+        TextUpdater.updateTextColor(xCondition, isValid);
+        TextUpdater.updateTextColor(yCondition, isValid);
+        TextUpdater.updateTextColor(zCondition, isValid);
+
+        updatePlaceValEnablement();
+    };
 
     private void updatePlaceValEnablement() {
         boolean anyCoordinateNotEmpty = (!xVal.getText().isEmpty()
@@ -246,10 +290,12 @@ public abstract class BaseController implements Localizable {
     }
 
     public abstract void setUpButtons();
+
     protected void setUpCancelButton() {
         cancelButton.setText(resourceManager.getString(insertPop, "cancel.button"));
         cancelButton.setOnAction(this::handleCancelButtonClicked);
     }
+
     protected StdGroupUltimate getIn4() {
         StdGroupUltimate groupUltimate = new StdGroupUltimate();
         groupUltimate.setSearch_key(searchKeyVal.getText());
@@ -257,7 +303,7 @@ public abstract class BaseController implements Localizable {
         groupUltimate.setCreation_date(LocalDate.now());
         groupUltimate.setStudent_count(Long.parseLong(studCountVal.getText()));
         groupUltimate.setExpelled_students(Long.parseLong(expStudentVal.getText()));
-        if(formEduVal.getText() == null || formEduVal.getText().isEmpty()){
+        if (formEduVal.getText() == null || formEduVal.getText().isEmpty()) {
             groupUltimate.setEduForm(null);
         } else {
             groupUltimate.setEduForm(FormOfEducation.valueOf(formEduVal.getText().toUpperCase()));
@@ -267,33 +313,33 @@ public abstract class BaseController implements Localizable {
         groupUltimate.setGroup_x(Integer.parseInt(groupXVal.getText()));
         groupUltimate.setGroup_y(Integer.parseInt(groupYVal.getText()));
         groupUltimate.setAdmin_name(adminNameVal.getText());
-        if(birthdayVal.getText() == null || birthdayVal.getText().isEmpty()){
+        if (birthdayVal.getText() == null || birthdayVal.getText().isEmpty()) {
             groupUltimate.setBirthday(null);
         } else {
             groupUltimate.setBirthday(LocalDate.parse(birthdayVal.getText()));
         }
-        if(weightVal.getText() == null || weightVal.getText().isEmpty()){
+        if (weightVal.getText() == null || weightVal.getText().isEmpty()) {
             groupUltimate.setWeight(null);
         } else {
             groupUltimate.setWeight(Integer.parseInt(weightVal.getText()));
         }
         groupUltimate.setEye_color(Color.valueOf(eyeColorVal.getText().toUpperCase()));
-        if(xVal.getText() == null || xVal.getText().isEmpty()){
+        if (xVal.getText() == null || xVal.getText().isEmpty()) {
             groupUltimate.setX(null);
         } else {
             groupUltimate.setX(Long.parseLong(xVal.getText()));
         }
-        if(yVal.getText() == null || yVal.getText().isEmpty()){
+        if (yVal.getText() == null || yVal.getText().isEmpty()) {
             groupUltimate.setY(null);
         } else {
             groupUltimate.setY(Integer.parseInt(yVal.getText()));
         }
-        if(zVal.getText() == null || zVal.getText().isEmpty()){
+        if (zVal.getText() == null || zVal.getText().isEmpty()) {
             groupUltimate.setZ(null);
         } else {
             groupUltimate.setZ(Integer.parseInt(zVal.getText()));
         }
-        if(placeVal.getText() == null || placeVal.getText().isEmpty()){
+        if (placeVal.getText() == null || placeVal.getText().isEmpty()) {
             groupUltimate.setPlace(null);
         } else {
             groupUltimate.setPlace(placeVal.getText());
@@ -321,6 +367,7 @@ public abstract class BaseController implements Localizable {
                         .or(placeValid.not())
         );
     }
+
     @FXML
     public void handleCancelButtonClicked(ActionEvent event) {
         Stage stage = (Stage) (((Node) event.getSource()).getScene().getWindow());
@@ -346,11 +393,18 @@ public abstract class BaseController implements Localizable {
     }
 
     protected void setUpInfo(StdGroupUltimate updatingGroup) {
+        creator.setVisible(true);
+        creator.setVisible(true);
+        creator.setDisable(false);
+        creatorVal.setDisable(false);
+        creatorVal.setEditable(false);
+        creator.setText(resourceManager.getString(tableView, "creator"));
+        creator.setStyle("-fx-font-weight: bold;");
         searchKeyVal.setText(updatingGroup.getSearch_key());
         groupNameVal.setText(updatingGroup.getGroup_name());
         studCountVal.setText(updatingGroup.getStudent_count().toString());
         expStudentVal.setText(updatingGroup.getExpelled_students().toString());
-        if(updatingGroup.getForm_of_education() == null) {
+        if (updatingGroup.getForm_of_education() == null) {
             formEduVal.setText("");
         } else {
             formEduVal.setText(updatingGroup.getForm_of_education().toString());
@@ -358,34 +412,35 @@ public abstract class BaseController implements Localizable {
         semesterVal.setText(updatingGroup.getSemester().toString());
         groupXVal.setText(updatingGroup.getGroup_x().toString());
         groupYVal.setText(updatingGroup.getGroup_y().toString());
+        creatorVal.setText(updatingGroup.getCreator());
         adminNameVal.setText(updatingGroup.getAdmin_name());
-        if(updatingGroup.getBirthday() == null) {
+        if (updatingGroup.getBirthday() == null) {
             birthdayVal.setText("");
         } else {
             birthdayVal.setText(updatingGroup.getBirthday().toString());
         }
-        if(updatingGroup.getWeight() == null) {
+        if (updatingGroup.getWeight() == null) {
             weightVal.setText("");
         } else {
             weightVal.setText(updatingGroup.getWeight().toString());
         }
         eyeColorVal.setText(updatingGroup.getEye_color().toString());
-        if(updatingGroup.getX() == null) {
+        if (updatingGroup.getX() == null) {
             xVal.setText("");
         } else {
             xVal.setText(updatingGroup.getX().toString());
         }
-        if(updatingGroup.getY() == null) {
+        if (updatingGroup.getY() == null) {
             yVal.setText("");
         } else {
             yVal.setText(updatingGroup.getY().toString());
         }
-        if(updatingGroup.getZ() == null) {
+        if (updatingGroup.getZ() == null) {
             zVal.setText("");
         } else {
             zVal.setText(updatingGroup.getZ().toString());
         }
-        if(updatingGroup.getPlace() == null) {
+        if (updatingGroup.getPlace() == null) {
             placeVal.setText("");
         } else {
             placeVal.setText(updatingGroup.getPlace());

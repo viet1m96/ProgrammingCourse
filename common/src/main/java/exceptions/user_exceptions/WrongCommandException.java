@@ -19,6 +19,6 @@ public class WrongCommandException extends UserException {
      */
     @Override
     public String toString() {
-        return "Wrong command, please try again";
+        return "wrong.command.exp";
     }
 }

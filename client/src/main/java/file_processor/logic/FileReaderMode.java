@@ -130,7 +130,13 @@ public class FileReaderMode {
         try {
             processFile(currentTrace, filePath);
         } catch (IOException | UserException | NetworkException e) {
-            resultRender.addResultVBox(returnInfoVbox(e.toString()));
+            String content;
+            if(resourceManager.getString(baseStarters, e.toString()) != null) {
+                content = resourceManager.getString(baseStarters, e.toString());
+            } else {
+                content = e.toString();
+            }
+            resultRender.addResultVBox(returnInfoVbox(content));
         }
     }
 

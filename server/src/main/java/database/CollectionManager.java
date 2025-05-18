@@ -1,50 +1,32 @@
 package database;
 
 import authorization_lib.JwtUtil;
-import exceptions.user_exceptions.NotCreatorException;
+import exceptions.user_exceptions.*;
 import exceptions.database_exception.UnsuccesfulDeletionException;
 import exceptions.database_exception.UnsuccesfulInsertException;
 import exceptions.database_exception.UnsuccesfulUpdateException;
 import exceptions.log_exceptions.LogException;
-import exceptions.user_exceptions.KeyTakenException;
-import exceptions.user_exceptions.NameTakenException;
-import exceptions.user_exceptions.WrongKeyException;
 import goods.Request;
 import goods.Response;
 import handler.Translator;
 import logging.LogUtil;
+import main_objects.Coordinates;
 import main_objects.StudyGroup;
 
 
 import java.time.LocalDateTime;
 import java.util.*;
 
-/**
- * The `CollectionManager` class manages the collection of `StudyGroup` objects.
- * It provides methods for interacting with the collection, such as adding, removing, updating, and displaying elements.
- * It also handles data persistence using the `DatabaseManager`.
- */
 public class CollectionManager {
     private final DatabaseManager databaseManager;
     private final LinkedHashMap<String, StudyGroup> collection = new LinkedHashMap<>();
     private final String startTime = LocalDateTime.now().toString();
     private final String baseNotices= "notices";
-    /**
-     * Constructs a `CollectionManager` object.
-     *
-     * @param databaseManager The `DatabaseManager` used to interact with the database.
-     * @throws LogException If there is an error during the initialization process.
-     */
+
     public CollectionManager(DatabaseManager databaseManager) throws LogException {
         this.databaseManager = databaseManager;
     }
 
-    /**
-     * Checks if the collection is empty.
-     *
-     * @param request The request object.
-     * @return A `Response` object indicating that the collection is empty, or `null` if it is not empty.
-     */
     private Response checkEmpty(Request request) {
         synchronized (collection) {
             if (collection.isEmpty()) {
@@ -57,35 +39,28 @@ public class CollectionManager {
         }
     }
 
-    /**
-     * Checks if the collection contains a key.
-     *
-     * @param request The request object containing the key to check.
-     * @return `true` if the collection contains the key; `false` otherwise.
-     */
     private boolean checkKey(Request request) {
         String key = request.getArguments().get(0);
         return collection.containsKey(key);
     }
 
-    /**
-     * Checks if a creator matches the creator of a `StudyGroup` in the collection.
-     *
-     * @param creator   The creator to check.
-     * @param searchKey The key of the `StudyGroup` to check.
-     * @return `true` if the creator matches; `false` otherwise.
-     */
     private boolean checkCreator(String creator, String searchKey) {
         String creatorFromCollection = collection.get(searchKey).getCreator();
         return creator.equals(creatorFromCollection);
     }
 
-    /**
-     * Provides information about the collection.
-     *
-     * @param request The request object.
-     * @return A `Response` object containing information about the collection, such as its type, initialization date, and number of elements.
-     */
+    private boolean checkCoordinate(StudyGroup studyGroup) {
+        Coordinates coordinates = studyGroup.getCoordinates();
+        String searchKey = studyGroup.getSearchKey();
+        synchronized (collection) {
+            for(StudyGroup element: collection.values()) {
+                Coordinates coordinatesFromCollection = element.getCoordinates();
+                if(coordinatesFromCollection.equals(coordinates) && !element.getSearchKey().equals(searchKey)) return false;
+            }
+        }
+        return true;
+    }
+
     public Response info(Request request) {
         Response response = null;
         List<String> notice = new ArrayList<>();
@@ -103,17 +78,7 @@ public class CollectionManager {
     }
 
 
-    /**
-     * Inserts a new `StudyGroup` into the collection.
-     *
-     * @param request The request object containing the `StudyGroup` to insert.
-     * @return A `Response` object indicating the success of the insertion.
-     * @throws KeyTakenException          If the key is already taken.
-     * @throws NameTakenException         If there is a name conflict.
-     * @throws LogException               If there is an error during the insertion process.
-     * @throws UnsuccesfulInsertException If the insertion into the database fails.
-     */
-    public Response insert(Request request) throws KeyTakenException, NameTakenException, LogException, UnsuccesfulInsertException {
+    public Response insert(Request request) throws KeyTakenException, NameTakenException, LogException, UnsuccesfulInsertException, UniqueCoordinateException {
         String search_key = request.getArguments().get(0);
         StudyGroup studyGroup = request.getStudyGroup();
 
@@ -123,6 +88,7 @@ public class CollectionManager {
         }
         studyGroup.setSearchKey(search_key);
         studyGroup.setCreator(JwtUtil.getUsername(request.getToken()));
+        if(!checkCoordinate(studyGroup)) throw new UniqueCoordinateException();
         databaseManager.insertStudyGroup(studyGroup);
         synchronized (collection) {
             collection.put(search_key, request.getStudyGroup());
@@ -130,12 +96,6 @@ public class CollectionManager {
         return new Response(new ArrayList<>(), null, request.getRemoteAddress(), true);
     }
 
-    /**
-     * Displays the elements of the collection.
-     *
-     * @param request The request object.
-     * @return A `Response` object containing the elements of the collection.
-     */
     public Response show(Request request) {
         List<String> notice = new ArrayList<>();
         List<StudyGroup> studyGroups = new ArrayList<>();
@@ -153,14 +113,6 @@ public class CollectionManager {
         return response;
     }
 
-    /**
-     * Clears the collection.
-     *
-     * @param request The request object.
-     * @return A `Response` object indicating the success of the clearing operation.
-     * @throws LogException                 If there is an error during the clearing process.
-     * @throws UnsuccesfulDeletionException If the deletion from the database fails.
-     */
     public Response clear(Request request) throws LogException, UnsuccesfulDeletionException {
         Response response = checkEmpty(request);
         if (response == null) {
@@ -176,16 +128,6 @@ public class CollectionManager {
         return response;
     }
 
-    /**
-     * Removes an element from the collection by its key.
-     *
-     * @param request The request object containing the key of the element to remove.
-     * @return A `Response` object indicating the success of the removal operation.
-     * @throws WrongKeyException            If the key does not exist.
-     * @throws UnsuccesfulDeletionException If the deletion from the database fails.
-     * @throws NotCreatorException          If the user is not the creator of the element.
-     * @throws LogException                 If there is an error during the removal process.
-     */
     public Response remove_key(Request request) throws WrongKeyException, UnsuccesfulDeletionException, NotCreatorException, LogException {
         Response response = checkEmpty(request);
         if (response == null) {
@@ -204,13 +146,6 @@ public class CollectionManager {
         return response;
     }
 
-    /**
-     * Removes elements from the collection if they are greater than a given value.
-     *
-     * @param request The request object containing the value to compare against.
-     * @return A `Response` object indicating the number of elements removed.
-     * @throws LogException If there is an error during the removal process.
-     */
     public Response remove_greater(Request request) throws LogException {
         Response response = checkEmpty(request);
         if (response == null) {
@@ -227,17 +162,7 @@ public class CollectionManager {
         return response;
     }
 
-    /**
-     * Updates an element in the collection.
-     *
-     * @param request The request object containing the updated element.
-     * @return A `Response` object indicating the success of the update operation.
-     * @throws WrongKeyException          If the key does not exist.
-     * @throws LogException               If there is an error during the update process.
-     * @throws NotCreatorException        If the user is not the creator of the element.
-     * @throws UnsuccesfulUpdateException If the update in the database fails.
-     */
-    public Response update(Request request) throws WrongKeyException, LogException, NotCreatorException, UnsuccesfulUpdateException {
+    public Response update(Request request) throws WrongKeyException, LogException, NotCreatorException, UnsuccesfulUpdateException, UniqueCoordinateException {
         Response response = checkEmpty(request);
         if (response == null) {
             String searchKey = request.getArguments().get(0);
@@ -257,29 +182,19 @@ public class CollectionManager {
             studyGroup.setId(id);
             studyGroup.getGroupAdmin().setId(adminId);
             List<String> notice = new ArrayList<>();
+            if(!checkCoordinate(studyGroup)) throw new UniqueCoordinateException();
             databaseManager.updateStudyGroup(studyGroup);
             synchronized (collection) {
                 collection.remove(searchKey);
                 collection.put(searchKey, studyGroup);
-                notice.add("The element with key " + searchKey + " was successfully updated");
+                notice.add(Translator.getString(baseNotices, "element.key", request.getLocale()) + " " + searchKey + " " + Translator.getString(baseNotices, "successful.update", request.getLocale()));
             }
             return new Response(notice, null, request.getRemoteAddress(), true);
         }
         return response;
     }
 
-    /**
-     * Replaces an element in the collection if it is lower than a given value.
-     *
-     * @param request The request object containing the element to replace with.
-     * @return A `Response` object indicating the success of the replacement operation.
-     * @throws WrongKeyException            If the key does not exist.
-     * @throws NotCreatorException          If the user is not the creator of the element.
-     * @throws LogException                 If there is an error during the replacement process.
-     * @throws UnsuccesfulInsertException   If the insertion into the database fails.
-     * @throws UnsuccesfulDeletionException If the deletion from the database fails.
-     */
-    public Response replace_if_lower(Request request) throws WrongKeyException, NotCreatorException, LogException, UnsuccesfulInsertException, UnsuccesfulDeletionException {
+    public Response replace_if_lower(Request request) throws WrongKeyException, NotCreatorException, LogException, UnsuccesfulInsertException, UnsuccesfulDeletionException, UniqueCoordinateException {
         Response response = checkEmpty(request);
         if (response == null) {
             String searchKey = request.getArguments().get(0);
@@ -296,13 +211,14 @@ public class CollectionManager {
                 if (studentsCount < studyGroup.getStudentsCount()) replace = true;
             }
             if (replace) {
+                if(!checkCoordinate(studyGroup)) throw new UniqueCoordinateException();
                 databaseManager.replaceIfLower(studyGroup);
                 synchronized (collection) {
                     if (collection.get(searchKey).compareTo(studyGroup) < 0 && collection.get(searchKey).getCreator().equals(creatorFromReq)) {
                         collection.replace(searchKey, studyGroup);
-                        notice.add("The element with key " + searchKey + " was replaced");
+                        notice.add(Translator.getString(baseNotices, "element.key", request.getLocale()) + " " + searchKey + " " + Translator.getString(baseNotices, "successful.replace", request.getLocale()));
                     } else {
-                        notice.add("The element with key " + searchKey + " was not replaced");
+                        notice.add(Translator.getString(baseNotices, "element.key", request.getLocale()) + " " + searchKey + " " + Translator.getString(baseNotices, "unsuccessful.replace", request.getLocale()));
                     }
                 }
             }
@@ -327,12 +243,6 @@ public class CollectionManager {
         return response;
     }
 
-    /**
-     * Displays the elements of the collection in descending order.
-     *
-     * @param request The request object.
-     * @return A `Response` object containing the elements of the collection in descending order.
-     */
     public Response print_descending(Request request) {
         Response response = checkEmpty(request);
         if (response == null) {
@@ -348,12 +258,6 @@ public class CollectionManager {
         return response;
     }
 
-    /**
-     * Displays the semester enum field in descending order.
-     *
-     * @param request The request object.
-     * @return A `Response` object containing the semester enum field in descending order.
-     */
     public Response print_field_descending_semester_enum(Request request) {
         Response response = checkEmpty(request);
         if (response == null) {
@@ -371,11 +275,6 @@ public class CollectionManager {
     }
 
 
-    /**
-     * Uploads data from the database into the collection.
-     *
-     * @throws LogException If there is an error during the data upload process.
-     */
     public void uploadData() throws LogException {
         try {
             List<StudyGroup> result = databaseManager.uploadData();

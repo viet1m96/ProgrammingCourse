@@ -18,14 +18,14 @@
             <columns>
                 <TableColumn fx:id="keyColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="groupNameColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="groupXColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="groupYColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="createDateColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="stdCountColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="expStudentColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="eduFormColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="semesterColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="creatorColumn" prefWidth="175.0"/>
-                <TableColumn fx:id="groupXColumn" prefWidth="175.0"/>
-                <TableColumn fx:id="groupYColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="adminNameColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="adminBirthColumn" prefWidth="175.0"/>
                 <TableColumn fx:id="adminWeightColumn" prefWidth="175.0"/>

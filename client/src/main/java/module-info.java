@@ -11,6 +11,7 @@ module demo.client {
     requires java.desktop;
     requires org.apache.logging.log4j;
     requires common;
+    requires javafx.swing;
 
 
     opens gui.sign_in_up to javafx.fxml;

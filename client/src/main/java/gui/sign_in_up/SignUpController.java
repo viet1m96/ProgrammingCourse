@@ -120,7 +120,7 @@ public class SignUpController implements Localizable {
             Response response = Client.work(request);
             AlertUtil.showResultAlert(response, actionEvent);
             if(response.getSuccess()) {
-                Client.setAccount(arguments.get(0), arguments.get(1), request.getToken());
+                Client.setAccount(arguments.get(0), arguments.get(1), response.getResult().get(0));
                 FXMLLoaderUlti.changeSceneWithoutHistory(actionEvent, "/gui/working_session/mainView.fxml");
             }
         } catch (NetworkException e) {
