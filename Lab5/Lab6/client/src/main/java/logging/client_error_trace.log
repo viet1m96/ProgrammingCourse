@@ -1,0 +1,44 @@
+2025-03-08 21:46:06.913 [main] ERROR - Stack trace
+java.net.PortUnreachableException
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive0(Native Method)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receiveIntoNativeBuffer(DatagramChannelImpl.java:750)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:736)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:543)
+	at network.Receiver.getAResponse(Receiver.java:21)
+	at network.Transporter.transport(Transporter.java:60)
+	at iostream.Controller.processInput(Controller.java:86)
+	at iostream.Controller.run(Controller.java:63)
+	at iostream.Main.main(Main.java:15)
+2025-03-08 21:46:09.584 [main] ERROR - Stack trace
+java.net.PortUnreachableException
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive0(Native Method)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receiveIntoNativeBuffer(DatagramChannelImpl.java:750)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:736)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:543)
+	at network.Receiver.getAResponse(Receiver.java:21)
+	at network.Transporter.transport(Transporter.java:60)
+	at iostream.Controller.processInput(Controller.java:86)
+	at iostream.Controller.run(Controller.java:63)
+	at iostream.Main.main(Main.java:15)
+2025-03-08 21:46:11.519 [main] ERROR - Stack trace
+java.net.PortUnreachableException
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive0(Native Method)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receiveIntoNativeBuffer(DatagramChannelImpl.java:750)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:736)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:543)
+	at network.Receiver.getAResponse(Receiver.java:21)
+	at network.Transporter.transport(Transporter.java:60)
+	at iostream.Controller.processInput(Controller.java:86)
+	at iostream.Controller.run(Controller.java:63)
+	at iostream.Main.main(Main.java:15)
+2025-03-11 10:46:36.004 [main] ERROR - Stack trace
+java.net.PortUnreachableException
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive0(Native Method)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receiveIntoNativeBuffer(DatagramChannelImpl.java:750)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:736)
+	at java.base/sun.nio.ch.DatagramChannelImpl.receive(DatagramChannelImpl.java:543)
+	at network.Receiver.getAResponse(Receiver.java:21)
+	at network.Transporter.transport(Transporter.java:60)
+	at iostream.Controller.processInput(Controller.java:86)
+	at iostream.Controller.run(Controller.java:63)
+	at iostream.Main.main(Main.java:15)

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane fx:id="anchorTable" prefHeight="500.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.working_session.TableViewController">
+    <ScrollPane fitToHeight="true" prefHeight="500.0" prefWidth="640.0"
+                style="-fx-border-width: 0; -fx-background-color: transparent;" AnchorPane.bottomAnchor="0.0"
+                AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="160.0" AnchorPane.topAnchor="0.0">
+        <TableView fx:id="tableView" style="-fx-border-width: 2" focusTraversable="false">
+            <columns>
+                <TableColumn fx:id="keyColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="groupNameColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="groupXColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="groupYColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="createDateColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="stdCountColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="expStudentColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="eduFormColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="semesterColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="creatorColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminNameColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminBirthColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminWeightColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminEyeColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminXColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminYColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminZColumn" prefWidth="175.0"/>
+                <TableColumn fx:id="adminPlaceColumn" prefWidth="175.0"/>
+            </columns>
+        </TableView>
+    </ScrollPane>
+    <VBox fx:id="vBox" alignment="CENTER" prefHeight="500.0" prefWidth="200" spacing="10.0"
+          style="-fx-background-color: lightblue; -fx-border-width: 2" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Label fx:id="curUserLabel" prefWidth="185.0"/>
+        <Button fx:id="insertButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleInsertButtonClicked"/>
+        <Button fx:id="historyButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleHistoryButtonClicked"/>
+        <Button fx:id="clearButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleClearButtonClicked"/>
+        <Button fx:id="removeGreater" mnemonicParsing="false" prefWidth="185.0" onAction="#handleRemoveGreaterButtonClicked"/>
+        <Button fx:id="instructionButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleInstructionButtonClicked"/>
+        <Button fx:id="informationButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleInformationButtonClicked"/>
+        <Button fx:id="scriptButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleExecuteScriptButtonClicked"/>
+        <Button fx:id="clearFilterButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleClearFiltersButtonClicked"/>
+        <Button fx:id="signOutButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleSignOutButtonClicked"/>
+        <ComboBox fx:id="languageBox" onAction="#handleLanguageClicked" prefWidth="185.0"/>
+        <Button fx:id="exitButton" mnemonicParsing="false" prefWidth="185.0" onAction="#handleExitButtonClicked"/>
+    </VBox>
+</AnchorPane>
